@@ -6,23 +6,8 @@ the orm layer if this is preferred.
 
 ---------------------------------------
   * [Installation](#installation)
-  * [Connector](#create-or-expand-a-database)
-  * [ORM](#using-siridb)
-    * [SiriDB Connectors](#siridb-connectors)
-    * [SiriDB HTTP](#siridb-http)
-    * [SiriDB Prompt](#siridb-prompt)
-  * [API/Query language](#query-language)
-  * [Docker](#docker)
-    * [Single SiriDB server setup](#single-siridb-server-setup)
-      * [Get the SiriDB server up and running](#get-the-siridb-server-up-and-running)
-      * [Create a database](#create-a-database)
-      * [Insert data](#insert-data)
-      * [SiriDB HTTP server](#siridb-http-server)
-    * [Advanced setup](#advanced-setup)
-      * [Infrastructure](#infrastructure)
-      * [Verify the getting started setup](#verify-the-getting-started-setup)
-      * [Create a replica](#create-a-replica)
-      * [Add an additional pool](#add-an-additional-pool)
+  * [Connector](#connector)
+  * [ORM](#orm-layer)
 
 ---------------------------------------
 
@@ -97,7 +82,7 @@ loop.run_until_complete(insert_alice())
 
 ```
 
-Usage ORM
+ORM Layer
 =========
 
 Insert
