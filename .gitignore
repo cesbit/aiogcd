@@ -1,0 +1,14 @@
+# VSCode
+.vscode
+
+# PyCharm
+.idea/
+
+# Eclipse/PyCharm/IDE
+workspace.xml
+.project
+.pydevproject
+
+# Python
+*.pyc
+__pycache__/
