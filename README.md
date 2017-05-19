@@ -12,10 +12,7 @@ the orm layer if this is preferred.
 ---------------------------------------
 
 ## Installation
-From PyPI (recommend)
-```
-pip3 install qpack
-```
+This is still a BETA version.
 
 ## Connector
 
