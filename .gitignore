@@ -12,3 +12,4 @@ workspace.xml
 # Python
 *.pyc
 __pycache__/
+*.egg-info/
