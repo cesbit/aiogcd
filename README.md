@@ -1,8 +1,8 @@
 Async Google Cloud Datastore API
 ================================
-Package aiogcd includes both a connector and orm layer. By design the connector
-has no orm dependencies. This makes it possible to use the connector without
-the orm layer if this is preferred.
+Package aiogcd includes both a Connector and ORM layer. By design the connector
+has no dependencies to the ORM layer. This makes it possible to use the
+connector without the orm layer if this is preferred.
 
 ---------------------------------------
   * [Installation](#installation)
@@ -21,7 +21,7 @@ This is still a BETA version.
 
 ```python
 import asyncio
-from lib.gcd.connector import GcdConnector
+from aiogcd.connector import GcdConnector
 
 async def example():
 
@@ -49,8 +49,8 @@ Create a new entity:
 
 ```python
 import asyncio
-from lib.gcd.connector import GcdConnector
-from lib.gcd.connector.entity import Entity
+from aiogcd.connector import GcdConnector
+from aiogcd.connector.entity import Entity
 
 async def insert_alice():
     gcd = GcdConnector(
@@ -86,11 +86,11 @@ Insert
 
 ```python
 import asyncio
-from lib.gcd.connector import GcdConnector
-from lib.gcd.connector.key import Key
-from lib.gcd.orm import GcdModel
-from lib.gcd.orm.properties import StringValue
-from lib.gcd.orm.properties import IntegerValue
+from aiogcd.connector import GcdConnector
+from aiogcd.connector.key import Key
+from aiogcd.orm import GcdModel
+from aiogcd.orm.properties import StringValue
+from aiogcd.orm.properties import IntegerValue
 
 # Create a GcdModel for kind 'User'
 class User(GcdModel):
