@@ -7,15 +7,25 @@ connector without the orm layer if this is preferred.
 ---------------------------------------
   * [Installation](#installation)
   * [Connector](#connector)
+    * [Quick usage](#quick-usage)
+    * [Entity](#entity)
   * [ORM](#orm-layer)
 
 ---------------------------------------
 
 ## Installation
-This is still a BETA version.
+The most easy way is to install this package using PyPI:
+```
+pip3 install aiogcd
+```
+
+To install from source code:
+```
+python3 setup.py install
+```
 
 ## Connector
-
+The connector is designed so that it can be used without using the ORM layer.
 
 ### Quick usage:
 
