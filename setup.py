@@ -1,11 +1,15 @@
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.9.2'
+VERSION = '0.9.4'
 
 setup(
     name='aiogcd',
-    packages=['aiogcd'],
+    packages=[
+        'aiogcd',
+        'aiogcd.connector',
+        'aiogcd.orm',
+        'aiogcd.orm.properties'],
     version=VERSION,
     description='Async Google Cloud Datastore API',
     author='Jeroen van der Heijden',
