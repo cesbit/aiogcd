@@ -1,7 +1,7 @@
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.9.1'
+VERSION = '0.9.2'
 
 setup(
     name='aiogcd',

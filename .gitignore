@@ -14,3 +14,4 @@ workspace.xml
 __pycache__/
 *.egg-info/
 dist/
+build/
