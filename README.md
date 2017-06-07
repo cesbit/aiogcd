@@ -1,7 +1,7 @@
 Async Google Cloud Datastore API
 ================================
-Package aiogcd includes both a Connector and ORM layer. By design the connector
-has no dependencies to the ORM layer. This makes it possible to use the
+Package aiogcd includes both a Connector and ORM layer for communicating with Google Cloud Datastore without using App Engine. 
+> By design the connector has no dependencies to the ORM layer. This makes it possible to use the
 connector without the orm layer if this is preferred.
 
 ---------------------------------------
