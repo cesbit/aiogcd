@@ -175,7 +175,7 @@ gcd = GcdConnector(
 loop = asyncio.get_event_loop()
 loop.run_until_complete(gcd.connect())
 loop.run_until_complete(insert_alice())
-loop.run_until_complete(insert_alice())
+loop.run_until_complete(query_users())
 
 ```
 
