@@ -92,8 +92,6 @@ loop.run_until_complete(insert_alice())
 ORM Layer
 =========
 
-Insert
-
 ```python
 import asyncio
 from aiogcd.connector import GcdConnector
