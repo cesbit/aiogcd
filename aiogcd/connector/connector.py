@@ -1,7 +1,8 @@
 """connector.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
+   Authors: Jeroen van der Heijden <jeroen@transceptor.technology>
+            jomido <https://github.com/jomido>
 """
 import json
 import aiohttp
