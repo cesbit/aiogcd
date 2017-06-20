@@ -17,6 +17,12 @@ from distutils.core import setup, Extension
 
 VERSION = '0.9.6'
 
+install_requires = [
+    'aiohttp==2.2.0',
+    'PyJWT==1.5.0',
+    'cryptography==1.9'
+]
+
 setup(
     name='aiogcd',
     packages=[
@@ -33,6 +39,7 @@ setup(
         'github.com/transceptor-technology/'
         'aiogcd/tarball/{}'.format(VERSION),
     keywords=['gcd', 'datastore', 'connector'],
+    install_requires=install_requires,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Other Environment',

@@ -1,11 +1,13 @@
 """connector.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
+   Authors: Jeroen van der Heijden <jeroen@transceptor.technology>
+            jomido <https://github.com/jomido>
 """
 import json
 import aiohttp
-from .token import Token
+from .client_token import Token
+from .service_account_token import ServiceAccountToken
 from .entity import Entity
 from .key import Key
 
@@ -345,3 +347,25 @@ class GcdConnector:
             self._check_mutation_result(entity_or_key, mutation_result)
             for entity_or_key, mutation_result
             in zip(entities_or_keys, mutations_results))
+
+
+class GcdServiceAccountConnector(GcdConnector):
+    def __init__(
+            self,
+            project_id,
+            service_file,
+            session=None,
+            scopes=None):
+
+        scopes = scopes or list(DEFAULT_SCOPES)
+        self.project_id = project_id
+        self._token = ServiceAccountToken(project_id, service_file, scopes,
+                                          session)
+
+        self._run_query_url = DATASTORE_URL.format(
+            project_id=self.project_id,
+            method='runQuery')
+
+        self._commit_url = DATASTORE_URL.format(
+            project_id=self.project_id,
+            method='commit')
