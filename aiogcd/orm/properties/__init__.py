@@ -11,3 +11,4 @@ from .jsonvalue import JsonValue
 from .doublevalue import DoubleValue
 from .keyvalue import KeyValue
 from .anyvalue import AnyValue
+from .datetimevalue import DatetimeValue
