@@ -106,7 +106,7 @@ class GcdModel(Entity, metaclass=_ModelClass):
                 super().__setattr__(prop.name, None)
 
     def __new__(mcs, *args, **kwargs):
-        if not hasattr(mcs, '__kind__'):
+        if getattr(mcs, '__kind__') is None:
             mcs.__kind__ = mcs.__name__
         return super().__new__(mcs)
 

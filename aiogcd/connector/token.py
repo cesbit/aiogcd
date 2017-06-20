@@ -158,8 +158,9 @@ class Token:
                         ))
 
     def _save_token(self):
-        if not os.path.exists(os.path.dirname(self._token_file)):
-            os.mkdir(os.path.dirname(self._token_file))
+        path = os.path.dirname(self._token_file)
+        if path and not os.path.exists(path):
+            os.mkdir(path)
         with open(self._token_file, 'w') as f:
             json.dump(self._token, f)
 

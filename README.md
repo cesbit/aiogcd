@@ -110,9 +110,9 @@ class User(GcdModel):
 # If you want a model for a specific kind and use a different class name
 # you can set __kind__ to the required kind name. For example:
 
-class UserModel(GcdModel):
-    __kind__ = 'User'
-    ...
+#  class UserModel(GcdModel):
+#      __kind__ = 'User'
+#      ...
 
 # example insert
 async def insert_alice():

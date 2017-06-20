@@ -1,0 +1,7 @@
+aiogcd (0.9.5)
+
+  * Fixed setting the correct Kind for a model. (issue #3)
+
+  * Fixed creating token file when a file is given without path. (issue #4)
+
+ -- Jeroen van der Heijden <jeroen@transceptor.technology>  20 Jun 2017
