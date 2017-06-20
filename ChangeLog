@@ -1,3 +1,14 @@
+aiogcd (0.9.7)
+
+  * Added service authentication. (@jomido, issue #1)
+   - rename so that PyJWT doesn't bomb ('token' is module in stdlib)
+   - service account token logic
+   - add top-level names
+   - add a service account connector
+   - add dependencies to setup.py
+
+ -- Jeroen van der Heijden <jeroen@transceptor.technology>  20 Jun 2017
+
 aiogcd (0.9.6)
 
   * Fixed raising an IndexError when no id/name is given. (issue #2)

@@ -16,7 +16,7 @@ python3 setup.py sdist upload -r pypi
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.9.6'
+VERSION = '0.9.7'
 
 install_requires = [
     'aiohttp==2.2.0',
