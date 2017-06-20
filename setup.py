@@ -15,7 +15,7 @@ python3 setup.py sdist upload -r pypi
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.9.5'
+VERSION = '0.9.6'
 
 setup(
     name='aiogcd',

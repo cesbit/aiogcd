@@ -1,3 +1,9 @@
+aiogcd (0.9.6)
+
+  * Fixed raising an IndexError when no id/name is given. (issue #2)
+
+ -- Jeroen van der Heijden <jeroen@transceptor.technology>  20 Jun 2017
+
 aiogcd (0.9.5)
 
   * Fixed setting the correct Kind for a model. (issue #3)

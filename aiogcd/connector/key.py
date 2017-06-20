@@ -120,8 +120,7 @@ class Key:
         if 'name' in pair:
             return pair['name']
 
-        raise IndexError(
-            'Both "id" and "name" are missing in pair: {}'.format(pair))
+        return None
 
     @staticmethod
     def _deserialize_ks(ks):
