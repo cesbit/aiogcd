@@ -1,7 +1,8 @@
 """setup.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
+   Authors: Jeroen van der Heijden <jeroen@transceptor.technology>
+            jomido <https://github.com/jomido>
 
 Upload to PyPI, Thx to: http://peterdowns.com/posts/first-time-with-pypi.html
 
