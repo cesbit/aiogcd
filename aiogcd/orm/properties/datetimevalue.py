@@ -2,7 +2,7 @@ from .value import Value
 from ...connector.timestampvalue import TimestampValue
 import re
 
-RFC3339_RE = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:(?:[\+\-]\d{2}:\d{2})|Z)$')
+RFC3339_RE = re.compile(r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:(?:[\+\-]\d{2}:\d{2})|Z)$')  # nopep8
 
 
 class DatetimeValue(Value):
