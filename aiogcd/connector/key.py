@@ -68,6 +68,9 @@ class Key:
         self.path = \
             Path(pairs=zip(*[iter(args)]*2)) if path is None else path
 
+    def get_path(self):
+        return self.path.get_as_tuple()
+
     def __repr__(self):
         return self.path.__repr__()
 

@@ -42,7 +42,7 @@ class Path:
         return self._path.__getitem__(item)
 
     def __repr__(self):
-        return str(tuple((pe.kind, pe.id) for pe in self._path))
+        return str(self.get_as_tuple())
 
     def get_dict(self):
         return {'path': [pe.get_dict() for pe in self._path]}
@@ -53,3 +53,8 @@ class Path:
         for path_element in self._path:
             n += path_element.byte_size
         return n
+
+    def get_as_tuple(self):
+        """Returns a tuple of pairs (tuples) representing the key path of an
+        entity. Useful for composing entities with a specific ancestor."""
+        return tuple((pe.kind, pe.id) for pe in self._path)
