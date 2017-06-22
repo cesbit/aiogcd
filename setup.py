@@ -3,6 +3,7 @@
 Created on: May 19, 2017
    Authors: Jeroen van der Heijden <jeroen@transceptor.technology>
             jomido <https://github.com/jomido>
+            egalpin <https://github.com/egalpin>
 
 Upload to PyPI, Thx to: http://peterdowns.com/posts/first-time-with-pypi.html
 
@@ -16,7 +17,7 @@ python3 setup.py sdist upload -r pypi
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.9.8'
+VERSION = '0.9.9'
 
 install_requires = [
     'aiohttp==2.2.0',
