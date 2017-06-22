@@ -22,7 +22,8 @@ VERSION = '0.9.9'
 install_requires = [
     'aiohttp==2.2.0',
     'PyJWT==1.5.0',
-    'cryptography==1.9'
+    'cryptography==1.9',
+    'asyncio_extras==1.3.0'
 ]
 
 setup(

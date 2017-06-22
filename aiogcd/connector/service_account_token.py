@@ -1,7 +1,7 @@
 from urllib.parse import urlencode, quote_plus
+from asyncio_extras.contextmanager import async_contextmanager
 import asyncio
 import aiohttp
-import contextlib
 import datetime
 import json
 import jwt
@@ -16,13 +16,13 @@ MISMATCH = "Project name passed to Token does not match service_file's " \
            "project_id."
 
 
-@contextlib.contextmanager
-def ensure_session(session):
+@async_contextmanager
+async def ensure_session(session):
 
     if session:
         yield session
     else:
-        with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession() as session:
             yield session
 
 
@@ -101,7 +101,7 @@ class ServiceAccountToken():
         }
         payload = urlencode(payload, quote_via=quote_plus)
 
-        with ensure_session(self.session) as s:
+        async with ensure_session(self.session) as s:
             response = await s.post(
                 url,
                 data=payload,
