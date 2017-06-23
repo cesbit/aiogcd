@@ -158,7 +158,7 @@ class Key:
 
         return project_id, path
 
-    def parent(self):
+    def get_parent(self):
         parent_pairs = self.path.get_as_tuple()[:-1]
         parent_path = Path(pairs=parent_pairs)
         return Key(path=parent_path, project_id=self.project_id)
