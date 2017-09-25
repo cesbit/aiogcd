@@ -94,6 +94,6 @@ class Filter(dict):
     async def get_key(self, gcd):
         return await gcd.get_key(self)
 
-    async def get_keys(self, gcd):
+    async def get_keys(self, gcd, offset=None, limit=None):
         await self.set_offset_limit(offset, limit)
         return await gcd.get_keys(self)
