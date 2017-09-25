@@ -1,3 +1,9 @@
+aiogcd (0.9.13)
+
+  * Fixed tabs/spaces.
+
+ -- Jeroen van der Heijden <jeroen@transceptor.technology>  25 Sep 2017
+
 aiogcd (0.9.12)
 
   * Fixed infinite loop on service account token acquiring (@doubtx, issue #12)

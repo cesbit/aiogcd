@@ -109,9 +109,8 @@ class ServiceAccountToken():
                 headers=headers,
                 timeout=60
             )
+            json = await response.json()
 
-	    json = await response.json()	
-        
         return json
 
     def _generate_assertion(self):
