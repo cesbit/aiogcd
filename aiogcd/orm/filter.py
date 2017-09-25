@@ -54,7 +54,7 @@ class Filter(dict):
         """Set offset and limit for Filter query.
 
         :param offset: can be int or None(to avoid setting offset)
-        :param limit: can be int or None(to avoid setting offset)
+        :param limit: can be int or None(to avoid setting limit)
         :return: True: always returns True
         """
         if offset:
