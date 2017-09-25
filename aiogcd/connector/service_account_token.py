@@ -110,7 +110,9 @@ class ServiceAccountToken():
                 timeout=60
             )
 
-        return await response.json()
+	    json = await response.json()	
+        
+        return json
 
     def _generate_assertion(self):
         payload = self._make_gcloud_oauth_body(
