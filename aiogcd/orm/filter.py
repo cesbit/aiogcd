@@ -50,7 +50,7 @@ class Filter(dict):
 
         super().__init__(**filter_dict)
 
-    async def set_offset_limit(self, offset, limit):
+    def set_offset_limit(self, offset, limit):
         """Set offset and limit for Filter query.
 
         :param offset: can be int or None(to avoid setting offset)
@@ -88,12 +88,12 @@ class Filter(dict):
         :param limit: integer to specify max number of rows to return
         :return: list containing GcdModel objects.
         """
-        await self.set_offset_limit(offset, limit)
+        self.set_offset_limit(offset, limit)
         return [self._model(ent) for ent in await gcd.get_entities(self)]
 
     async def get_key(self, gcd):
         return await gcd.get_key(self)
 
     async def get_keys(self, gcd, offset=None, limit=None):
-        await self.set_offset_limit(offset, limit)
+        self.set_offset_limit(offset, limit)
         return await gcd.get_keys(self)
