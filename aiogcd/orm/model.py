@@ -147,8 +147,8 @@ class GcdModel(Entity, metaclass=_ModelClass):
         return cls.__kind__
 
     @classmethod
-    async def get_entities(cls, gcd):
-        return await Filter(cls).get_entities(gcd)
+    async def get_entities(cls, gcd, offset=None, limit=None):
+        return await Filter(cls).get_entities(gcd, offset, limit)
 
     def serializable_dict(self, key_as=None):
         data = {

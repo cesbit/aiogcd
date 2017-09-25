@@ -50,6 +50,27 @@ class Filter(dict):
 
         super().__init__(**filter_dict)
 
+    async def set_offset_limit(self, offset, limit):
+        """Set offset and limit for Filter query.
+
+        :param offset: can be int or None(to avoid setting offset)
+        :param limit: can be int or None(to avoid setting offset)
+        :return: True: always returns True
+        """
+        if offset:
+            if not isinstance(offset, int):
+                raise TypeError('offset is expected to be int, %s passed' % type(offset))
+
+            self['query']['offset'] = offset
+
+        if limit:
+            if not isinstance(limit, int):
+                raise TypeError('limit is expected to be int, %s passed' % type(limit))
+
+            self['query']['limit'] = limit
+
+        return True
+
     async def get_entity(self, gcd: GcdConnector):
         """Return a GcdModel instance from the supplied filter.
 
@@ -59,16 +80,20 @@ class Filter(dict):
         entity = await gcd.get_entity(self)
         return None if entity is None else self._model(entity)
 
-    async def get_entities(self, gcd: GcdConnector) -> list:
+    async def get_entities(self, gcd: GcdConnector, offset=None, limit=None) -> list:
         """Returns a list containing GcdModel instances from the supplied filter.
 
         :param gcd: GcdConnector instance.
+        :param offset: integer to specify how many rows to skip
+        :param limit: integer to specify max number of rows to return
         :return: list containing GcdModel objects.
         """
+        await self.set_offset_limit(offset, limit)
         return [self._model(ent) for ent in await gcd.get_entities(self)]
 
     async def get_key(self, gcd):
         return await gcd.get_key(self)
 
     async def get_keys(self, gcd):
+        await self.set_offset_limit(offset, limit)
         return await gcd.get_keys(self)
