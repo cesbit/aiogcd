@@ -86,7 +86,8 @@ class Filter(dict):
 
     async def get_entities(
             self, gcd: GcdConnector, offset=None, limit=None) -> list:
-        """Returns a list containing GcdModel instances from the supplied filter.
+        """Returns a list containing GcdModel instances from the supplied
+        filter.
 
         :param gcd: GcdConnector instance.
         :param offset: integer to specify how many rows to skip
