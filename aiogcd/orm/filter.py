@@ -59,13 +59,17 @@ class Filter(dict):
         """
         if offset:
             if not isinstance(offset, int):
-                raise TypeError('offset is expected to be int, %s passed' % type(offset))
+                raise TypeError(
+                    'offset is expected to be int, {} passed'.format(
+                        type(offset)))
 
             self['query']['offset'] = offset
 
         if limit:
             if not isinstance(limit, int):
-                raise TypeError('limit is expected to be int, %s passed' % type(limit))
+                raise TypeError(
+                    'limit is expected to be int, {} passed'.format(
+                        type(limit)))
 
             self['query']['limit'] = limit
 
@@ -80,7 +84,8 @@ class Filter(dict):
         entity = await gcd.get_entity(self)
         return None if entity is None else self._model(entity)
 
-    async def get_entities(self, gcd: GcdConnector, offset=None, limit=None) -> list:
+    async def get_entities(
+            self, gcd: GcdConnector, offset=None, limit=None) -> list:
         """Returns a list containing GcdModel instances from the supplied filter.
 
         :param gcd: GcdConnector instance.
