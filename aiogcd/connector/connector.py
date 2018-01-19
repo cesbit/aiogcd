@@ -297,6 +297,8 @@ class GcdConnector:
             'readOptions': read_options,
             'keys': [k.get_dict() for k in keys],
         })
+        get_deferred_as_key = lambda content: [Key(result) for result in
+                                               content.get('deferred', [])]
 
         if missing is not None and missing != []:
             raise ValueError('missing must be None or an empty list')
@@ -323,12 +325,10 @@ class GcdConnector:
                                        content.get('missing', []))
 
                     if deferred is not None:
-                        deferred.extend(Key(result) for result in
-                                       content.get('deferred', []))
+                        deferred.extend(get_deferred_as_key(content))
                         break
 
-                keys = content.get('deferred')
-
+                keys = get_deferred_as_key(content)
         if entities:
             return entities
 
