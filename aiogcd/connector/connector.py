@@ -10,6 +10,7 @@ from .client_token import Token
 from .service_account_token import ServiceAccountToken
 from .entity import Entity
 from .key import Key
+from .utils import make_read_options
 
 DEFAULT_SCOPES = {
     'https://www.googleapis.com/auth/datastore',
@@ -18,6 +19,8 @@ DEFAULT_SCOPES = {
 
 DATASTORE_URL = \
     'https://datastore.googleapis.com/v1/projects/{project_id}:{method}'
+
+_MAX_LOOPS = 128
 
 
 class GcdConnector:
@@ -44,6 +47,10 @@ class GcdConnector:
         self._commit_url = DATASTORE_URL.format(
             project_id=self.project_id,
             method='commit')
+
+        self._lookup_url = DATASTORE_URL.format(
+            project_id=self.project_id,
+            method='lookup')
 
     async def connect(self):
         await self._token.connect()
@@ -276,49 +283,67 @@ class GcdConnector:
         data = {'query': {'kind': [{'name': kind}]}}
         return await self.get_entities(data)
 
-    async def get_entity_by_key(self, key):
+
+    async def get_entities_by_keys(self, keys, missing=None, deferred=None,
+                                   eventual=False):
+        """Returns entity objects for the given keys or None in case no
+        entity is found.
+
+        :param keys: list of Key objects
+        :return: list of Entity objects or None.
+        """
+        read_options = make_read_options(eventual=eventual)
+        data = lambda: json.dumps({
+            'readOptions': read_options,
+            'keys': [k.get_dict() for k in keys],
+        })
+
+        if missing is not None and missing != []:
+            raise ValueError('missing must be None or an empty list')
+
+        if deferred is not None and deferred != []:
+            raise ValueError('deferred must be None or an empty list')
+
+        attempts = 0
+        entities = []
+        while keys and attempts < _MAX_LOOPS:
+            attempts += 1
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                        self._lookup_url,
+                        data=data(),
+                        headers=await self._get_headers()) as resp:
+
+                    content = await resp.json()
+                    entities.extend(Entity(result['entity']) for result in
+                                    content.get('found', []))
+
+                    if missing is not None:
+                        missing.extend(result['entity'] for result in
+                                       content.get('missing', []))
+
+                    if deferred is not None:
+                        deferred.extend(Key(result) for result in
+                                       content.get('deferred', []))
+                        break
+
+                keys = content.get('deferred')
+
+        if entities:
+            return entities
+
+    async def get_entity_by_key(self, key, missing=None, deferred=None,
+                                eventual=False):
         """Returns an entity object for the given key or None in case no
         entity is found.
 
         :param key: Key object
         :return: Entity object or None.
         """
-        data = json.dumps({
-            'query': {
-                'filter': {
-                    'propertyFilter': {
-                        'property': {
-                            'name': '__key__'
-                        },
-                        'op': 'EQUAL',
-                        'value': {
-                            'keyValue': key.get_dict()
-                        }
-                    }
-                }
-            }
-        })
-
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                    self._run_query_url,
-                    data=data,
-                    headers=await self._get_headers()) as resp:
-
-                content = await resp.json()
-
-                try:
-                    res = content['batch']['entityResults']
-                except KeyError:
-                    return None
-
-                entity_res = res.pop()
-
-                assert len(res) == 0, \
-                    'Expecting zero or one entity but found {} results'\
-                    .format(len(res))
-
-                return Entity(entity_res['entity'])
+        entity = await self.get_entities_by_keys([key], missing, deferred,
+                                                 eventual)
+        if entity:
+            return entity[0]
 
     async def _get_headers(self):
         token = await self._token.get()
@@ -369,3 +394,7 @@ class GcdServiceAccountConnector(GcdConnector):
         self._commit_url = DATASTORE_URL.format(
             project_id=self.project_id,
             method='commit')
+
+        self._lookup_url = DATASTORE_URL.format(
+            project_id=self.project_id,
+            method='lookup')

@@ -4,6 +4,7 @@ Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@transceptor.technology>
 """
 import base64
+import json
 from .key import Key
 from .timestampvalue import TimestampValue
 
@@ -72,3 +73,16 @@ def value_from_dict(val):
         return None
 
     raise TypeError('Unexpected or unsupported value: {}'.format(val))
+
+
+def make_read_options(transaction=None, eventual=True):
+    """Reference:
+        https://cloud.google.com/datastore/docs/reference/rest/v1/ReadOptions
+    """
+    read_options = {
+        'readConsistency': 'EVENTUAL' if eventual else 'STRONG',
+    }
+    if transaction is not None:
+        read_options.update({'transaction': transaction})
+
+    return read_options
