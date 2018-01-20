@@ -83,6 +83,6 @@ def make_read_options(transaction=None, eventual=True):
         'readConsistency': 'EVENTUAL' if eventual else 'STRONG',
     }
     if transaction is not None:
-        read_options.update({'transaction': transaction})
+        read_options['transaction'] = transaction
 
     return read_options
