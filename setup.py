@@ -17,13 +17,13 @@ python3 setup.py sdist upload -r pypi
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.9.14'
+VERSION = '0.10.0'
 
 install_requires = [
-    'aiohttp==2.2.0',
-    'PyJWT==1.5.0',
-    'cryptography==1.9',
-    'asyncio_extras==1.3.0'
+    'aiohttp>=2',
+    'PyJWT>=1',
+    'cryptography>=1',
+    'asyncio_extras>=1'
 ]
 
 setup(

@@ -283,7 +283,6 @@ class GcdConnector:
         data = {'query': {'kind': [{'name': kind}]}}
         return await self.get_entities(data)
 
-
     async def get_entities_by_keys(self, keys, missing=None, deferred=None,
                                    eventual=False):
         """Returns entity objects for the given keys or None in case no
@@ -321,16 +320,16 @@ class GcdConnector:
                     if missing is not None:
                         missing.extend(result['entity'] for result in
                                        content.get('missing', []))
-                                      
+
                     deferred_keys = [Key(result) for result in
                                      content.get('deferred', [])]
 
                     if deferred is not None:
                         deferred.extend(deferred_keys)
                         break
-                                       
+
                     keys = deferred_keys
-                                   
+
         if entities:
             return entities
 
