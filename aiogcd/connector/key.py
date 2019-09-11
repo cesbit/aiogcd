@@ -74,6 +74,14 @@ class Key:
     def __repr__(self):
         return self.path.__repr__()
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.ks == other.ks
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def encode(self):
         """Return a Buffer() object which is a byte-like object.
 

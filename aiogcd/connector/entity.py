@@ -46,6 +46,16 @@ class Entity:
     def __setattr__(self, key, value):
         self.__dict__[key] = value
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.key.ks == other.key.ks
+        elif isinstance(other, Key):
+            return self.key.ks == other.ks
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def get_dict(self):
         """Returns dictionary object which can be used to insert, upsert or
         update the entity in the google cloud datastore."""
