@@ -194,12 +194,12 @@ class GcdConnector:
         :return: list containing Entity objects.
         """
         results = []
-        start_cursor = None
+        cursor = None
         while True:
             async with aiohttp.ClientSession() as session:
 
-                if start_cursor is not None:
-                    data['query']['startCursor'] = start_cursor
+                if cursor is not None:
+                    data['query']['startCursor'] = cursor
 
                 async with session.post(
                         self._run_query_url,
@@ -216,6 +216,7 @@ class GcdConnector:
                         results.extend(entity_results)
 
                         more_results = content['batch']['moreResults']
+                        cursor = content['batch']['endCursor']
 
                         if more_results in (
                                 'NO_MORE_RESULTS',
@@ -224,7 +225,6 @@ class GcdConnector:
                             break
 
                         if more_results == 'NOT_FINISHED':
-                            start_cursor = content['batch']['endCursor']
                             continue
 
                         raise ValueError(
@@ -239,7 +239,7 @@ class GcdConnector:
                         )
                     )
 
-        return results
+        return results, cursor
 
     async def get_entities(self, data):
         """Return entities by given query data.
@@ -249,12 +249,12 @@ class GcdConnector:
                 v1/projects/runQuery
         :return: list containing Entity objects.
         """
-        results = await self.run_query(data)
+        results, _ = await self.run_query(data)
         return [Entity(result['entity']) for result in results]
 
     async def get_keys(self, data):
         data['query']['projection'] = [{'property': {'name': '__key__'}}]
-        results = await self.run_query(data)
+        results, _ = await self.run_query(data)
         return [Key(result['entity']['key']) for result in results]
 
     async def get_entity(self, data):

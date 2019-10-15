@@ -11,6 +11,7 @@ class Filter(dict):
 
     def __init__(self, model, *filters, has_ancestor=None, key=None):
         self._model = model
+        self._cursor = None
         filters = list(filters)
 
         if has_ancestor is not None:
@@ -50,30 +51,28 @@ class Filter(dict):
 
         super().__init__(**filter_dict)
 
-    def set_offset_limit(self, offset, limit):
-        """Set offset and limit for Filter query.
+    @property
+    def cursor(self):
+        return self._cursor
 
-        :param offset: can be int or None(to avoid setting offset)
-        :param limit: can be int or None(to avoid setting limit)
-        :return: True: always returns True
-        """
-        if offset:
-            if not isinstance(offset, int):
-                raise TypeError(
-                    'offset is expected to be int, {} passed'.format(
-                        type(offset)))
+    def order_by(self, *order):
+        self['query']['order'] = [
+            {
+                'property': {'name': p[0].name},
+                'direction': p[1]
+            } if isinstance(p, tuple) else {
+                'property': {'name': p.name},
+                'direction': 'DIRECTION_UNSPECIFIED'
+            }
+            for p in order
+        ]
+        return self
 
-            self['query']['offset'] = offset
-
-        if limit:
-            if not isinstance(limit, int):
-                raise TypeError(
-                    'limit is expected to be int, {} passed'.format(
-                        type(limit)))
-
-            self['query']['limit'] = limit
-
-        return True
+    def limit(self, limit, start_cursor=None):
+        self['query']['limit'] = limit
+        if start_cursor is not None:
+            self['query']['startCursor'] = start_cursor
+        return self
 
     async def get_entity(self, gcd: GcdConnector):
         """Return a GcdModel instance from the supplied filter.
@@ -84,8 +83,7 @@ class Filter(dict):
         entity = await gcd.get_entity(self)
         return None if entity is None else self._model(entity)
 
-    async def get_entities(
-            self, gcd: GcdConnector, offset=None, limit=None) -> list:
+    async def get_entities(self, gcd: GcdConnector) -> list:
         """Returns a list containing GcdModel instances from the supplied
         filter.
 
@@ -94,12 +92,12 @@ class Filter(dict):
         :param limit: integer to specify max number of rows to return
         :return: list containing GcdModel objects.
         """
-        self.set_offset_limit(offset, limit)
-        return [self._model(ent) for ent in await gcd.get_entities(self)]
+        entities, cursor = await gcd.run_query(self)
+        self._cursor = gcd._cursor
+        return [self._model(ent) for ent in entities]
 
-    async def get_key(self, gcd):
+    async def get_key(self, gcd: GcdConnector):
         return await gcd.get_key(self)
 
-    async def get_keys(self, gcd, offset=None, limit=None):
-        self.set_offset_limit(offset, limit)
+    async def get_keys(self, gcd: GcdConnector) -> list:
         return await gcd.get_keys(self)
