@@ -14,6 +14,14 @@ class Value:
         self.required = required
         self.name = None
 
+    @property
+    def ascending(self):
+        return self.name, 'ASCENDING'
+
+    @property
+    def descending(self):
+        return self.name, 'DESCENDING'
+
     def check_value(self, value):
         raise NotImplementedError()
 

@@ -1,6 +1,6 @@
 Async Google Cloud Datastore API
 ================================
-Package aiogcd includes both a Connector and ORM layer for communicating with Google Cloud Datastore without using App Engine. 
+Package aiogcd includes both a Connector and ORM layer for communicating with Google Cloud Datastore without using App Engine.
 > By design the connector has no dependencies to the ORM layer. This makes it possible to use the
 connector without the orm layer if this is preferred.
 
@@ -153,6 +153,20 @@ async def query_users():
     users = await User.filter(
         User.name == 'Alice',
         has_ancestor= Key('Foo', 123)).get_entities(gcd)
+
+    # get all user entities with name 'Alice' and sort on age
+    users = await User.filter(
+        User.name == 'Alice'
+        ).order_by(
+            User.age.ascending
+        ).get_entities(gcd)
+
+    # get first 2 user entities with name 'Alice' and sort on age
+    users = await User.filter(
+        User.name == 'Alice'
+        ).order_by(
+            User.age.ascending
+        ).limit(2).get_entities(gcd)
 
 # example update
 async def update_age(ks, new_age):

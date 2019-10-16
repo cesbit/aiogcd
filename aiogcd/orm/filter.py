@@ -58,7 +58,7 @@ class Filter(dict):
     def order_by(self, *order):
         self['query']['order'] = [
             {
-                'property': {'name': p[0].name},
+                'property': {'name': p[0]},
                 'direction': p[1]
             } if isinstance(p, tuple) else {
                 'property': {'name': p.name},
@@ -83,7 +83,8 @@ class Filter(dict):
         entity = await gcd.get_entity(self)
         return None if entity is None else self._model(entity)
 
-    async def get_entities(self, gcd: GcdConnector) -> list:
+    async def get_entities(
+            self, gcd: GcdConnector, offset=None, limit=None) -> list:
         """Returns a list containing GcdModel instances from the supplied
         filter.
 
@@ -92,12 +93,33 @@ class Filter(dict):
         :param limit: integer to specify max number of rows to return
         :return: list containing GcdModel objects.
         """
-        entities, cursor = await gcd.run_query(self)
-        self._cursor = gcd._cursor
+        if limit is not None:
+            self['query']['limit'] = limit
+        if offset is not None:
+            self['query']['offset'] = offset
+        entities, cursor = await gcd._get_entities_cursor(self)
+        self._cursor = cursor
         return [self._model(ent) for ent in entities]
 
     async def get_key(self, gcd: GcdConnector):
+        """Return a Gcd key from the supplied filter.
+
+        :param gcd: GcdConnector instance.
+        :return: GcdModel key or None in case no entity was found.
+        """
         return await gcd.get_key(self)
 
-    async def get_keys(self, gcd: GcdConnector) -> list:
+    async def get_keys(
+            self, gcd: GcdConnector, offset=None, limit=None) -> list:
+        """Returns a list containing Gcd keys from the supplied filter.
+
+        :param gcd: GcdConnector instance.
+        :param offset: integer to specify how many keys to skip
+        :param limit: integer to specify max number of keys to return
+        :return: list containing Gcd key objects.
+        """
+        if limit is not None:
+            self['query']['limit'] = limit
+        if offset is not None:
+            self['query']['offset'] = offset
         return await gcd.get_keys(self)
