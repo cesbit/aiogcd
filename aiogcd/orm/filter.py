@@ -51,6 +51,32 @@ class Filter(dict):
 
         super().__init__(**filter_dict)
 
+    def _set_start_cursor(self, start_cursor):
+        if start_cursor:
+            if not isinstance(start_cursor, str):
+                raise TypeError(
+                    'start_cursor is expected to be str, {} passed'.format(
+                        type(start_cursor)))
+            self['query']['startCursor'] = start_cursor
+
+    def _set_offset(self, offset):
+        if offset:
+            if not isinstance(offset, int):
+                raise TypeError(
+                    'offset is expected to be int, {} passed'.format(
+                        type(offset)))
+
+            self['query']['offset'] = offset
+
+    def _set_limit(self, limit):
+        if limit:
+            if not isinstance(limit, int):
+                raise TypeError(
+                    'limit is expected to be int, {} passed'.format(
+                        type(limit)))
+
+            self['query']['limit'] = limit
+
     @property
     def cursor(self):
         return self._cursor
@@ -69,9 +95,8 @@ class Filter(dict):
         return self
 
     def limit(self, limit, start_cursor=None):
-        self['query']['limit'] = limit
-        if start_cursor is not None:
-            self['query']['startCursor'] = start_cursor
+        self._set_limit(limit)
+        self._set_start_cursor(start_cursor)
         return self
 
     async def get_entity(self, gcd: GcdConnector):
@@ -93,10 +118,8 @@ class Filter(dict):
         :param limit: integer to specify max number of rows to return
         :return: list containing GcdModel objects.
         """
-        if limit is not None:
-            self['query']['limit'] = limit
-        if offset is not None:
-            self['query']['offset'] = offset
+        self._set_offset(offset)
+        self._set_limit(limit)
         entities, cursor = await gcd._get_entities_cursor(self)
         self._cursor = cursor
         return [self._model(ent) for ent in entities]
@@ -118,8 +141,15 @@ class Filter(dict):
         :param limit: integer to specify max number of keys to return
         :return: list containing Gcd key objects.
         """
-        if limit is not None:
-            self['query']['limit'] = limit
-        if offset is not None:
-            self['query']['offset'] = offset
+        self._set_offset(offset)
+        self._set_limit(limit)
         return await gcd.get_keys(self)
+
+    def set_offset_limit(self, offset, limit):
+        """Set offset and limit for Filter query.
+        :param offset: can be int or None(to avoid setting offset)
+        :param limit: can be int or None(to avoid setting limit)
+        :return: True: always returns True
+        """
+        self._set_offset(offset)
+        self._set_limit(limit)
