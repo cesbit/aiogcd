@@ -153,3 +153,4 @@ class Filter(dict):
         """
         self._set_offset(offset)
         self._set_limit(limit)
+        return True
