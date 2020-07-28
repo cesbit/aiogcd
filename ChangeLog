@@ -1,3 +1,9 @@
+aiogcd (0.11.1)
+
+  * Fixed missing await in run_query. (issue #20)
+
+ -- Jeroen van der Heijden <jeroen@transceptor.technology>  28 Jul 2020
+
 aiogcd (0.11.0)
 
   * Added cursor for handling offset and pagination. (@Koos85, issue #18)

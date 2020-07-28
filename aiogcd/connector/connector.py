@@ -193,7 +193,7 @@ class GcdConnector:
                 v1/projects/runQuery
         :return: list containing Entity objects.
         """
-        results, _ = self._run_query(data)
+        results, _ = await self._run_query(data)
         return results
 
     async def _run_query(self, data):

@@ -20,7 +20,7 @@ Upload to PyPI
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.11.0'
+VERSION = '0.11.1'
 
 install_requires = [
     'aiohttp>=2',
