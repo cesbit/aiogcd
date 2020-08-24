@@ -300,10 +300,12 @@ class GcdConnector:
         :return: list of Entity objects or None.
         """
         read_options = make_read_options(eventual=eventual)
-        data = lambda: json.dumps({
-            'readOptions': read_options,
-            'keys': [k.get_dict() for k in keys],
-        })
+
+        def data():
+            return json.dumps({
+                'readOptions': read_options,
+                'keys': [k.get_dict() for k in keys],
+            })
 
         if missing is not None and missing != []:
             raise ValueError('missing must be None or an empty list')

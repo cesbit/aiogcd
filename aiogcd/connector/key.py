@@ -151,8 +151,8 @@ class Key:
                 continue
 
             if tt == 114:
-                l = decoder.get_var_int32()
-                decoder.set_end(l)
+                sz = decoder.get_var_int32()
+                decoder.set_end(sz)
                 path = path_from_decoder(decoder)
                 decoder.set_end()
 

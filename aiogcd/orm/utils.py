@@ -86,12 +86,12 @@ if __name__ == '__main__':
         if not isinstance(val, int):
             raise TypeError('Only integers are allowed.')
 
-    l = [1, 2, 3]
-    p = ProtectedList(l, protect=check_int) + [3]
+    li = [1, 2, 3]
+    p = ProtectedList(li, protect=check_int) + [3]
     p.append(5)
     p.extend([6])
     p += [7]
     print(p)
 
-    r = ProtectedList(l)
+    r = ProtectedList(li)
     del r[2]

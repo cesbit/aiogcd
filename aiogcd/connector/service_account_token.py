@@ -30,7 +30,7 @@ async def ensure_session(session):
 class ServiceAccountToken():
 
     def __init__(self, project_id: str, service_file: str,
-                 scopes: ScopeList, session: aiohttp.ClientSession=None):
+                 scopes: ScopeList, session: aiohttp.ClientSession = None):
 
         self.project_id = project_id
 
