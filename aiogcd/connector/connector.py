@@ -66,7 +66,7 @@ class GcdConnector:
         :param entities: tuple or list with Entity objects
         :return: tuple containing boolean values
         """
-        return self._commit_entities_or_keys(entities, 'insert')
+        return await self._commit_entities_or_keys(entities, 'insert')
 
     async def insert_entity(self, entity):
         """Returns True if successful or False if not. In case of False then
@@ -90,7 +90,7 @@ class GcdConnector:
         :param entities: tuple or list with Entity objects
         :return: tuple containing boolean values
         """
-        return self._commit_entities_or_keys(entities, 'upsert')
+        return await self._commit_entities_or_keys(entities, 'upsert')
 
     async def upsert_entity(self, entity):
         """Returns True if successful or False if not. In case of False then
@@ -113,7 +113,7 @@ class GcdConnector:
         :param entities: tuple or list with Entity objects
         :return: tuple containing boolean values
         """
-        return self._commit_entities_or_keys(entities, 'update')
+        return await self._commit_entities_or_keys(entities, 'update')
 
     async def update_entity(self, entity):
         """Returns True if successful or False if not. In case of False then
