@@ -1,3 +1,9 @@
+aiogcd (0.11.3)
+
+  * Fixed typo.
+
+ -- Jeroen van der Heijden <jeroen@transceptor.technology>  24 Aug 2020
+
 aiogcd (0.11.2)
 
   * Fixed more missing await calls in connector.py. (@AnjaBruls, issue #21)

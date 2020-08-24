@@ -58,7 +58,7 @@ class PathElement:
     def byte_size(self):
         n = self._size_str(self.kind)
         if isinstance(self.id, int):
-            n += 1 + self._size_var_int(self.id)s
+            n += 1 + self._size_var_int(self.id)
         else:
             n += 1 + self._size_str(self.id)
 
