@@ -18,6 +18,7 @@ class Key:
             Key({
                 "partitionId": {
                     "projectId": "my-project-id"
+                    "namespaceId" : "my-optional_namespace"
                 },
                 "path": [{
                   "kind": "Foo",
@@ -46,7 +47,9 @@ class Key:
                 self.KEY_INIT_MSG
 
             res = args[0]
-            self.project_id = res['partitionId']['projectId']
+            partitionId = res['partitionId']
+            self.project_id = partitionId['projectId']
+            self.namespace_id = partitionId.get('namespaceId')
             self.path = Path(pairs=tuple(
                 (pair['kind'], self._extract_id_or_name(pair))
                 for pair in res['path']
