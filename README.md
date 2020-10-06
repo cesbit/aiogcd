@@ -202,8 +202,8 @@ As of version 0.11.4, aiogcd has support for namespaces. For using namespaces th
 
 ### Key
 
-When initializing a key from a *key-string*, the `namespace_id` is automatically unpacked and when a key is initialized using a path,
-the namespace can be given using the `namespace_id=<my_namespace>` keyword argument.
+When initializing a key from a *key-string*, the `namespace_id` is automatically unpacked.
+If instead a `path` is used, the namespace can be given using the `namespace_id=<my_namespace>` keyword argument.
 
 It is also possible to set the namespace using a dictionary, like in the example below:
 
@@ -219,16 +219,17 @@ It is also possible to set the namespace using a dictionary, like in the example
 
 ### GcdModel
 
-If a GcdModel is used, it is possible to set the *namespace* on the model. For example:
+If a `GcdModel` is used, it is possible to set the *namespace* on the model. For example:
 
 ```python
 class Example(GcdModel):
     __namespace__ = 'my-namespace'
 ```
 
-Queries like `Example.get_entities(gcd)` will then automatically query the given namespace.
-As an alternative, the `gcd` connector can be initialized using the `namespace_id=...` keyword argument.
-When the `namespace_id` is set on the `gcd` object, all queries will use this namespace unless explicit set by a `GcdModel`.
+With the above solution, queries like `Example.get_entities(gcd)` will automatically query the correct namespace.
+
+As an alternative, the `GcdConnector` can be initialized using the `namespace_id=...` keyword argument.
+If the `namespace_id` argument is used, all queries will use the given namespace unless explicitly overwritten by a `GcdModel`.
 
 
 
