@@ -37,6 +37,11 @@ class Filter(dict):
 
         filter_dict = {'query': {'kind': [{'name': self._model.get_kind()}]}}
 
+        if self._model.__namespace__:
+            filter_dict['partitionId'] = {
+                'namespaceId': self._model.__namespace__
+            }
+
         if len(filters) == 1:
             filter_dict['query']['filter'] = {
                 'propertyFilter': filters[0]

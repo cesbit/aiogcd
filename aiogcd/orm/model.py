@@ -54,6 +54,7 @@ class GcdModel(Entity, metaclass=_ModelClass):
         MyModel(name='foo', age=3, ..., key=Key(...))
 """
     __kind__ = None
+    __namespace__ = None
 
     def __init__(self, entity=None, key=None, **template):
         """Initialize a GcdModel.
