@@ -17,8 +17,8 @@ class Key:
 
             Key({
                 "partitionId": {
-                    "projectId": "my-project-id"
-                    "namespaceId" : "my-optional_namespace"
+                    "projectId": "my-project-id",
+                    "namespaceId": "my-optional-namespace"
                 },
                 "path": [{
                   "kind": "Foo",

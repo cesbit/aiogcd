@@ -10,6 +10,7 @@ connector without the orm layer if this is preferred.
     * [Quick usage](#quick-usage)
     * [Entity](#entity)
   * [ORM](#orm-layer)
+  * [Namespaces](#namespaces)
 
 ---------------------------------------
 
@@ -194,6 +195,40 @@ loop.run_until_complete(query_users())
 ```
 
 
+Namespaces
+==========
+
+As of version 0.11.4, aiogcd has support for namespaces. For using namespaces the `Key` and `GcdModel`
+
+### Key
+
+When initializing a key from a *key-string*, the `namespace_id` is automatically unpacked and when a key is initialized using a path,
+the namespace can be given using the `namespace_id=<my_namespace>` keyword argument.
+
+It is also possible to set the namespace using a dictionary, like in the example below:
+
+```json
+{
+    "partitionId": {
+        "projectId": "my-project-id",
+        "namespaceId": "my-namespace"
+    }
+    ...
+}
+```
+
+### GcdModel
+
+If a GcdModel is used, it is possible to set the *namespace* on the model. For example:
+
+```python
+class Example(GcdModel):
+    __namespace__ = 'my-namespace'
+```
+
+Queries like `Example.get_entities(gcd)` will then automatically query the given namespace.
+As an alternative, the `gcd` connector can be initialized using the `namespace_id=...` keyword argument.
+When the `namespace_id` is set on the `gcd` object, all queries will use this namespace unless explicit set by a `GcdModel`.
 
 
 
