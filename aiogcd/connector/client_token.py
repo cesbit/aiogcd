@@ -201,7 +201,7 @@ code: '''.format(url))
                         content['scopes'] = list(self._scopes)
                         return content
 
-                    print('Got an error: {} ({})'.format(
+                    logging.error('Got an error: {} ({})'.format(
                         content.get('error', 'unknown'),
                         resp.status
                     ))
