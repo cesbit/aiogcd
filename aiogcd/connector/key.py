@@ -17,7 +17,8 @@ class Key:
 
             Key({
                 "partitionId": {
-                    "projectId": "my-project-id"
+                    "projectId": "my-project-id",
+                    "namespaceId": "my-optional-namespace"
                 },
                 "path": [{
                   "kind": "Foo",
@@ -39,14 +40,16 @@ class Key:
 """
     _ks = None
 
-    def __init__(self, *args, ks=None, path=None, project_id=None):
-
+    def __init__(self, *args, ks=None, path=None, project_id=None,
+                 namespace_id=None):
         if len(args) == 1 and isinstance(args[0], dict):
             assert ks is None and path is None and project_id is None, \
                 self.KEY_INIT_MSG
 
             res = args[0]
-            self.project_id = res['partitionId']['projectId']
+            partitionId = res['partitionId']
+            self.project_id = partitionId['projectId']
+            self.namespace_id = partitionId.get('namespaceId')
             self.path = Path(pairs=tuple(
                 (pair['kind'], self._extract_id_or_name(pair))
                 for pair in res['path']
@@ -56,7 +59,8 @@ class Key:
         if ks is not None:
             assert (not args) and path is None and project_id is None, \
                 self.KEY_INIT_MSG
-            self.project_id, self.path = self._deserialize_ks(ks)
+            self.project_id, self.namespace_id, self.path = \
+                self._deserialize_ks(ks)
             return
 
         assert project_id is not None and ((not args) ^ (path is None)), \
@@ -64,9 +68,9 @@ class Key:
 
         assert len(args) % 2 == 0, self.KEY_INIT_MSG
 
+        self.namespace_id = namespace_id  # namespace_id might be None
         self.project_id = project_id
-        self.path = \
-            Path(pairs=zip(*[iter(args)]*2)) if path is None else path
+        self.path = Path(pairs=zip(*[iter(args)]*2)) if path is None else path
 
     def get_path(self):
         return self.path.get_as_tuple()
@@ -95,6 +99,11 @@ class Key:
         buffer.add_prefixed_string('s~{}'.format(self.project_id))
 
         self.path.encode(buffer)
+
+        if self.namespace_id:
+            buffer.add_var_int32(162)
+            buffer.add_prefixed_string(self.namespace_id)
+
         return buffer
 
     @property
@@ -139,6 +148,7 @@ class Key:
 
         decoder = Decoder(ks=ks)
         project_id = None
+        namespace_id = None
         path = None
 
         while decoder:
@@ -155,16 +165,16 @@ class Key:
                 decoder.set_end(sz)
                 path = path_from_decoder(decoder)
                 decoder.set_end()
-
                 continue
 
             if tt == 162:
-                raise BufferDecodeError('namespaces are not supported')
+                namespace_id = decoder.get_prefixed_string()
+                continue
 
             if tt == 0:
                 raise BufferDecodeError('corrupt')
 
-        return project_id, path
+        return project_id, namespace_id, path
 
     def get_parent(self):
         parent_pairs = self.path.get_as_tuple()[:-1]

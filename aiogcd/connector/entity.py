@@ -22,7 +22,10 @@ class Entity:
                 ...
             },
             'key': {
-                'partitionId': {'projectId': 'my_project_id'},
+                'partitionId': {
+                    'projectId': 'my_project_id',
+                    'namespaceId': 'my_optional_namespaceId'
+                },
                 'path': [
                     {'kind': 'Foo', 'id': 1234},
                     ...

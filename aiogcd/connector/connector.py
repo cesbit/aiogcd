@@ -31,9 +31,11 @@ class GcdConnector:
             client_id,
             client_secret,
             token_file,
-            scopes=DEFAULT_SCOPES):
+            scopes=DEFAULT_SCOPES,
+            namespace_id=None):
 
         self.project_id = project_id
+        self.namespace_id = namespace_id
         self._token = Token(
             client_id,
             client_secret,
@@ -199,6 +201,14 @@ class GcdConnector:
     async def _run_query(self, data):
         results = []
         cursor = None
+
+        # set namespace_id if required
+        if self.namespace_id:
+            if 'partitionId' not in data:
+                data['partitionId'] = {'namespaceId': self.namespace_id}
+            elif 'namespaceId' not in data['partitionId']:
+                data['partitionId']['namespaceId'] = self.namespace_id
+
         while True:
             async with aiohttp.ClientSession() as session:
 
@@ -391,10 +401,13 @@ class GcdServiceAccountConnector(GcdConnector):
             project_id,
             service_file,
             session=None,
-            scopes=None):
+            scopes=None,
+            namespace_id=None):
 
         scopes = scopes or list(DEFAULT_SCOPES)
         self.project_id = project_id
+        self.namespace_id = namespace_id
+
         self._token = ServiceAccountToken(project_id, service_file, scopes,
                                           session)
 

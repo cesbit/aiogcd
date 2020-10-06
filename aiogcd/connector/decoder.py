@@ -98,9 +98,9 @@ class Decoder(Buffer):
         return result
 
     def get_prefixed_string(self):
-        l = self.get_var_int32()
-        if self._idx + l > len(self):
+        n = self.get_var_int32()
+        if self._idx + n > len(self):
             raise BufferDecodeError('truncated')
-        r = self[self._idx: self._idx + l]
-        self._idx += l
+        r = self[self._idx: self._idx + n]
+        self._idx += n
         return r.tostring().decode('utf-8')
