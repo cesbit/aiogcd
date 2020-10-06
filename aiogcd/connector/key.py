@@ -118,6 +118,10 @@ class Key:
 
     def get_dict(self):
         d = {'partitionId': {'projectId': self.project_id}}
+
+        if self.namespace_id:
+            d['partitionId']['namespaceId'] = self.namespace_id
+
         d.update(self.path.get_dict())
         return d
 
