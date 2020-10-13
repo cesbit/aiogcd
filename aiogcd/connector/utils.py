@@ -39,6 +39,10 @@ def value_to_dict(val):
         return {'arrayValue': {'values': [value_to_dict(v) for v in val]}}
     if isinstance(val, TimestampValue):
         return {'timestampValue': str(val)}
+    if isinstance(val, dict):
+        return {
+            'entityValue': {
+                'properties': {k: value_to_dict(v) for k, v in val.items()}}}
 
     raise TypeError('Unsupported type: {}'.format(type(val)))
 
@@ -67,10 +71,10 @@ def value_from_dict(val):
         val += b'=' * (4 - len(val) % 4)
         return base64.b64decode(
             val.replace(b'-', b'+').replace(b'_', b'/')).decode('utf-8')
-
     if 'entityValue' in val:
-        #  TODO: Do something with entity values
-        return None
+        return {
+            k: value_from_dict(v) 
+            for k, v in val['entityValue'].get('properties', {}).items()}
 
     raise TypeError('Unexpected or unsupported value: {}'.format(val))
 
