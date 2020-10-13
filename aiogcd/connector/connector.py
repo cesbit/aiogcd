@@ -57,7 +57,7 @@ class GcdConnector:
     async def connect(self):
         await self._token.connect()
 
-    async def entities(self, entities):
+    async def insert_entities(self, entities):
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -69,6 +69,9 @@ class GcdConnector:
         :return: tuple containing boolean values
         """
         return await self._commit_entities_or_keys(entities, 'insert')
+
+    # alias
+    entities = insert_entities
 
     async def insert_entity(self, entity):
         """Returns True if successful or False if not. In case of False then
@@ -126,7 +129,7 @@ class GcdConnector:
         :param entity: Entity object
         :return: Boolean
         """
-        return (await self._commit_entities_or_keys([entity], 'upsert'))[0]
+        return (await self._commit_entities_or_keys([entity], 'update'))[0]
 
     async def delete_keys(self, keys):
         """Returns a tuple containing boolean values. Each boolean value is
