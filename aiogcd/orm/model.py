@@ -171,6 +171,4 @@ class GcdModel(Entity, metaclass=_ModelClass):
             return val.ks
         if isinstance(val, list):
             return [cls._serialize_value(v) for v in val]
-        if isinstance(val, bytes):
-            return ''
         return val
