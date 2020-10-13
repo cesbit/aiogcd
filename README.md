@@ -11,6 +11,7 @@ connector without the orm layer if this is preferred.
     * [Entity](#entity)
   * [ORM](#orm-layer)
   * [Namespaces](#namespaces)
+  * [Emulator](#emulater)
 
 ---------------------------------------
 
@@ -232,4 +233,10 @@ As an alternative, the `GcdConnector` can be initialized using the `namespace_id
 If the `namespace_id` argument is used, all queries will use the given namespace unless explicitly overwritten by a `GcdModel`.
 
 
+Emulator
+========
+
+The Google Datastore emulator is supported by `aiogcd` and thus reads the `DATASTORE_EMULATOR_HOST` environment variable.
+Note that the `DATASTORE_PROJECT_ID` will be ignored and still needs to be set using the initialization of the `GcdConnector`.
+See https://cloud.google.com/datastore/docs/tools/datastore-emulator for documentation on how to start the emulator.
 

@@ -4,6 +4,7 @@ Created on: May 19, 2017
    Authors: Jeroen van der Heijden <jeroen@transceptor.technology>
             jomido <https://github.com/jomido>
 """
+import os
 import json
 import aiohttp
 from .client_token import Token
@@ -17,10 +18,19 @@ DEFAULT_SCOPES = {
     'https://www.googleapis.com/auth/cloud-platform'
 }
 
+DEFAULT_API_ENDPOINT = 'https://datastore.googleapis.com'
+
 DATASTORE_URL = \
-    'https://datastore.googleapis.com/v1/projects/{project_id}:{method}'
+    '{api_endpoint}/v1/projects/{project_id}:{method}'
 
 _MAX_LOOPS = 128
+
+
+def _get_api_endpoint():
+    emu_host = os.getenv('DATASTORE_EMULATOR_HOST')
+    if emu_host is None:
+        return DEFAULT_API_ENDPOINT
+    return 'http://{}'.format(emu_host)
 
 
 class GcdConnector:
@@ -42,15 +52,20 @@ class GcdConnector:
             token_file,
             scopes)
 
+        api_endpoint = _get_api_endpoint()
+
         self._run_query_url = DATASTORE_URL.format(
+            api_endpoint=api_endpoint,
             project_id=self.project_id,
             method='runQuery')
 
         self._commit_url = DATASTORE_URL.format(
+            api_endpoint=api_endpoint,
             project_id=self.project_id,
             method='commit')
 
         self._lookup_url = DATASTORE_URL.format(
+            api_endpoint=api_endpoint,
             project_id=self.project_id,
             method='lookup')
 
@@ -414,14 +429,19 @@ class GcdServiceAccountConnector(GcdConnector):
         self._token = ServiceAccountToken(project_id, service_file, scopes,
                                           session)
 
+        api_endpoint = _get_api_endpoint()
+
         self._run_query_url = DATASTORE_URL.format(
+            api_endpoint=api_endpoint,
             project_id=self.project_id,
             method='runQuery')
 
         self._commit_url = DATASTORE_URL.format(
+            api_endpoint=api_endpoint,
             project_id=self.project_id,
             method='commit')
 
         self._lookup_url = DATASTORE_URL.format(
+            api_endpoint=api_endpoint,
             project_id=self.project_id,
             method='lookup')
