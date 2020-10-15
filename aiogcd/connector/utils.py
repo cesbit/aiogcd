@@ -74,7 +74,7 @@ def value_from_dict(val):
         try:
             return data.decode('utf-8')
         except UnicodeDecodeError:
-            return val
+            return data
     if 'entityValue' in val:
         return {
             k: value_from_dict(v) 
