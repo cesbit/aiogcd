@@ -24,7 +24,7 @@ class Decoder(Buffer):
 
         ks += b'=' * (4 - len(ks) % 4)
         ks = base64.b64decode(ks.replace(b'-', b'+').replace(b'_', b'/'))
-        decoder.fromstring(ks)
+        decoder.frombytes(ks)
         decoder._idx = 0
         decoder.set_end()
         return decoder

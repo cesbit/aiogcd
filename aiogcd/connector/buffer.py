@@ -65,4 +65,4 @@ class Buffer(array.array):
         assert isinstance(val, str), \
             'Expecting a str value but got {}'.format(type(val))
         self.add_var_int32(len(val))
-        self.fromstring(val)
+        self.frombytes(val.encode())
