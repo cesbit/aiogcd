@@ -18,12 +18,12 @@ connector without the orm layer if this is preferred.
 ## Installation
 The most easy way is to install this package using PyPI:
 ```
-pip3 install aiogcd
+pip install aiogcd
 ```
 
 To install from source code:
 ```
-python3 setup.py install
+python setup.py install
 ```
 
 ## Connector

@@ -7,7 +7,7 @@ Created on: May 19, 2017
 
 Upload to PyPI:
 
-python3 setup.py sdist
+python setup.py sdist
 twine upload --repository pypitest dist/aiogcd-X.X.X.tar.gz
 twine upload --repository pypi dist/aiogcd-X.X.X.tar.gz
 """
