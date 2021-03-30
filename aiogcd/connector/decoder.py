@@ -103,4 +103,4 @@ class Decoder(Buffer):
             raise BufferDecodeError('truncated')
         r = self[self._idx: self._idx + n]
         self._idx += n
-        return r.tostring().decode('utf-8')
+        return r.tobytes().decode()
