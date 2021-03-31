@@ -151,11 +151,11 @@ class GcdModel(Entity, metaclass=_ModelClass):
     async def get_entities(cls, gcd, offset=None, limit=None):
         return await Filter(cls).get_entities(gcd, offset, limit)
 
-    def serializable_dict(self, key_as=None):
+    def serializable_dict(self, key_as=None, include_none=False):
         data = {
             prop.name: self._serialize_value(prop.get_value(self))
             for prop in self.model_props.values()
-            if prop.get_value(self) is not None
+            if include_none or prop.get_value(self) is not None
         }
 
         if isinstance(key_as, str):
