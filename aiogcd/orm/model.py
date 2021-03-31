@@ -152,7 +152,7 @@ class GcdModel(Entity, metaclass=_ModelClass):
         return await Filter(cls).get_entities(gcd, offset, limit)
 
     def serializable_dict(self, key_as=None, include_none=False):
-        """Serialize a GcdModel.
+        """Serialize a GcdModel to a Python dict.
 
         :param key_as: If key_as is set to a string value, then the key string
                        will be added to the dict. (default is None)
