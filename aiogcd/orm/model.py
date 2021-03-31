@@ -152,6 +152,13 @@ class GcdModel(Entity, metaclass=_ModelClass):
         return await Filter(cls).get_entities(gcd, offset, limit)
 
     def serializable_dict(self, key_as=None, include_none=False):
+        """Serialize a GcdModel.
+
+        :param key_as: If key_as is set to a string value, then the key string
+                       will be added to the dict. (default is None)
+        :param include_none: If include_none is set to True, None values will
+                             be included in the dict. (default is False)
+        """
         data = {
             prop.name: self._serialize_value(prop.get_value(self))
             for prop in self.model_props.values()

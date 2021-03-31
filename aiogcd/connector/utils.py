@@ -77,7 +77,7 @@ def value_from_dict(val):
             return data
     if 'entityValue' in val:
         return {
-            k: value_from_dict(v) 
+            k: value_from_dict(v)
             for k, v in val['entityValue'].get('properties', {}).items()}
 
     raise TypeError('Unexpected or unsupported value: {}'.format(val))
