@@ -93,6 +93,11 @@ class Entity:
         self.__dict__[prop] = value
         self._properties.add(prop)
 
+    def del_property(self, prop):
+        """Use this method to delete an existing property."""
+        del self.__dict__[prop]
+        self._properties.remove(prop)
+
 
 def _serialize_value(val):
     if isinstance(val, TimestampValue):

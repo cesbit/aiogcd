@@ -133,6 +133,11 @@ class GcdModel(Entity, metaclass=_ModelClass):
                 .format(self.__class__.__name__, prop))
         super().set_property(prop, value)
 
+    def del_property(self, prop):
+        if prop in self.model_props and self.model_props[prop].required:
+            raise TypeError('Property `{}` is marked as required', prop)
+        super().del_property(prop)
+
     @classmethod
     def filter(cls, *filters, has_ancestor=None, key=None):
         return Filter(
