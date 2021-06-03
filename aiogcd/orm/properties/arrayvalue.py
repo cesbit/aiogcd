@@ -28,10 +28,10 @@ class ArrayValue(Value):
         super().__init__(default=default, required=required)
 
     def check_value(self, value):
-        if not isinstance(value, list):
+        if not isinstance(value, (list, tuple)):
             raise TypeError(
-                'Expecting an value of type \'int\' for property {!r} '
-                'but received type {!r}.'
+                'Expecting an value of type \'list\' or \'tuple\' for '
+                'property {!r} but received type {!r}.'
                 .format(self.name, value.__class__.__name__))
 
         if self._accept and \
@@ -39,6 +39,18 @@ class ArrayValue(Value):
             raise TypeError(
                 'At least one item in array property {!r} has an invalid type.'
                 .format(self.name))
+
+    def check_compare(self, value):
+        """Ignore a compare for an array value as a value van be given which
+        filters all entities where the array contains the given value.
+
+        Suppose there exists an entity with an `arr` property with the array
+            [123, 456, 789]
+
+        The following would return that entity:
+            Entity.filter(Entity.arr == 456)
+        """
+        pass
 
     def _protect(self, value):
         if self._accept and not isinstance(value, self._accept):

@@ -25,6 +25,9 @@ class Value:
     def check_value(self, value):
         raise NotImplementedError()
 
+    def check_compare(self, value):
+        return self.check_value(value)
+
     def get_value(self, model):
         return model.__dict__.get(self.name, None)
 
@@ -32,7 +35,7 @@ class Value:
         Entity.set_property(model, self.name, value)
 
     def _compare(self, other, op):
-        self.check_value(other)
+        self.check_compare(other)
         return {
             'property': {
                 'name': self.name

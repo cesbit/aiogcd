@@ -18,3 +18,9 @@ build/
 
 # Mac
 .DS_Store
+
+# Json test data
+*.json
+
+# Local test
+/ltest.py
