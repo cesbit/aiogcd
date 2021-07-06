@@ -310,14 +310,25 @@ class GcdConnector:
         result = await self.get_keys(data)
         return result[0] if result else None
 
-    async def get_entities_by_kind(self, kind):
+    async def get_entities_by_kind(self, kind, offset=None, limit=None,
+                                   cursor=None):
         """Returns entities by kind.
 
-        This is a shortcut for:
-        get_entities({'query': {'kind': [{'name': kind}]}})
+        When a limit is set, this function returns a list and a cursor.
+        If no limit is used, then only the list will be returned.
         """
-        data = {'query': {'kind': [{'name': kind}]}}
-        return await self.get_entities(data)
+        query = {'kind': [{'name': kind}]}
+        data = {'query': query}
+        if cursor:
+            query['startCursor'] = cursor
+        if offset:
+            query['offset'] = offset
+
+        if limit is None:
+            return await self.get_entities(data)
+        else:
+            query['limit'] = limit
+            return await self._get_entities_cursor(data)
 
     async def get_entities_by_keys(self, keys, missing=None, deferred=None,
                                    eventual=False):
