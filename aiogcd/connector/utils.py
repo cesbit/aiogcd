@@ -80,9 +80,12 @@ def value_from_dict(val):
         data = base64.b64decode(
             (val + pad).replace(b'-', b'+').replace(b'_', b'/'))
         try:
+            # TODO: Maybe make deconding of blob values optional as we do
+            #       not now for sure if the blob value represents UTF-8 data.
             return data.decode('utf-8')
         except UnicodeDecodeError:
-            return data  #  TODOK moet dit of None?
+            return data
+
     if 'entityValue' in val:
         return {
             k: value_from_dict(v)
