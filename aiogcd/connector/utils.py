@@ -43,6 +43,14 @@ def value_to_dict(val):
         return {
             'entityValue': {
                 'properties': {k: value_to_dict(v) for k, v in val.items()}}}
+    if isinstance(val, bytes):
+        return {
+            'excludeFromIndexes': True,
+            'blobValue': base64.b64encode(val)
+            .replace(b'+', b'-')
+            .replace(b'/', b'_')
+            .rstrip(b'=')
+            .decode('utf-8')}
 
     raise TypeError('Unsupported type: {}'.format(type(val)))
 
@@ -67,14 +75,14 @@ def value_from_dict(val):
     if 'timestampValue' in val:
         return TimestampValue(val['timestampValue'])
     if 'blobValue' in val:
-        val = val['blobValue'].encode('utf-8')
+        val = val['blobValue']
         pad = b'=' * (4 - len(val) % 4)
         data = base64.b64decode(
             (val + pad).replace(b'-', b'+').replace(b'_', b'/'))
         try:
             return data.decode('utf-8')
         except UnicodeDecodeError:
-            return data
+            return data  #  TODOK moet dit of None?
     if 'entityValue' in val:
         return {
             k: value_from_dict(v)
