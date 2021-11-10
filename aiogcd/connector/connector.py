@@ -257,6 +257,8 @@ class GcdConnector:
                             break
 
                         if more_results == 'NOT_FINISHED':
+                            if data['query'].get('limit'):
+                                data['query']['limit'] -= len(entity_results)
                             continue
 
                         raise ValueError(
