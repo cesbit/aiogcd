@@ -76,17 +76,18 @@ def value_from_dict(val):
         return TimestampValue(val['timestampValue'])
     if 'blobValue' in val:
         val = val['blobValue']
-        if isinstance(val, str):
+        is_str = isinstance(val, str)
+        if is_str:
             val = val.encode('utf-8')
         pad = b'=' * (4 - len(val) % 4)
         data = base64.b64decode(
             (val + pad).replace(b'-', b'+').replace(b'_', b'/'))
-        try:
-            # TODO: Maybe make deconding of blob values optional as we do
-            #       not now for sure if the blob value represents UTF-8 data.
-            return data.decode('utf-8')
-        except UnicodeDecodeError:
-            return data
+        if is_str:
+            try:
+                return data.decode('utf-8')
+            except UnicodeDecodeError:
+                pass  # fallback
+        return data
 
     if 'entityValue' in val:
         return {
