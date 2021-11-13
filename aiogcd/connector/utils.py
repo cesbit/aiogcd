@@ -75,7 +75,7 @@ def value_from_dict(val):
     if 'timestampValue' in val:
         return TimestampValue(val['timestampValue'])
     if 'blobValue' in val:
-        val = val['blobValue']
+        val = val['blobValue'].encode('utf-8')
         pad = b'=' * (4 - len(val) % 4)
         data = base64.b64decode(
             (val + pad).replace(b'-', b'+').replace(b'_', b'/'))

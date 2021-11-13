@@ -259,6 +259,7 @@ class GcdConnector:
                         if more_results == 'NOT_FINISHED':
                             if data['query'].get('limit'):
                                 data['query']['limit'] -= len(entity_results)
+                            data['query'].pop('offset', None)
                             continue
 
                         raise ValueError(
