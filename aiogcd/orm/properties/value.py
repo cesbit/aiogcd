@@ -1,7 +1,7 @@
 """value.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
+    Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 from ...connector.entity import Entity
 from ...connector.utils import value_to_dict

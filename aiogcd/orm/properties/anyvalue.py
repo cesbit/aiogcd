@@ -1,7 +1,7 @@
 """anyvalue.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
+    Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 from .value import Value
 

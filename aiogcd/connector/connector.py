@@ -1,7 +1,7 @@
 """connector.py
 
 Created on: May 19, 2017
-   Authors: Jeroen van der Heijden <jeroen@transceptor.technology>
+   Authors: Jeroen van der Heijden <jeroen@cesbit.com>
             jomido <https://github.com/jomido>
 """
 import os

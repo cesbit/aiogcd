@@ -1,7 +1,7 @@
 """__init__.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
+    Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 from .connector import GcdConnector, GcdServiceAccountConnector
 from .client_token import Token

@@ -1,9 +1,10 @@
 """setup.py
 
 Created on: May 19, 2017
-   Authors: Jeroen van der Heijden <jeroen@transceptor.technology>
+   Authors: Jeroen van der Heijden <jeroen@cesbit.com>
             jomido <https://github.com/jomido>
             egalpin <https://github.com/egalpin>
+            Koos Joosten <koos@cesbit.com>
 
 Upload to PyPI:
 
@@ -34,7 +35,7 @@ setup(
     version=VERSION,
     description='Async Google Cloud Datastore API',
     author='Jeroen van der Heijden',
-    author_email='jeroen@transceptor.technology',
+    author_email='jeroen@cesbit.com',
     url='https://github.com/transceptor-technology/aiogcd',
     download_url='https://'
         'github.com/transceptor-technology/'
