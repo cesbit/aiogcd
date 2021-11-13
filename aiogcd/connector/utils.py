@@ -1,7 +1,7 @@
 """utils.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@cesbit.com>
+    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
 """
 import base64
 import json
@@ -75,7 +75,9 @@ def value_from_dict(val):
     if 'timestampValue' in val:
         return TimestampValue(val['timestampValue'])
     if 'blobValue' in val:
-        val = val['blobValue'].encode('utf-8')
+        val = val['blobValue']
+        if isinstance(val, str):
+            val = val.encode('utf-8')
         pad = b'=' * (4 - len(val) % 4)
         data = base64.b64decode(
             (val + pad).replace(b'-', b'+').replace(b'_', b'/'))
