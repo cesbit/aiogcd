@@ -13,3 +13,4 @@ from .keyvalue import KeyValue
 from .anyvalue import AnyValue
 from .datetimevalue import DatetimeValue
 from .entityvalue import EntityValue
+from .bytesvalue import BytesValue

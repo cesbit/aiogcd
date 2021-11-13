@@ -1,7 +1,7 @@
 """utils.py
 
 Created on: May 19, 2017
-    Author: Jeroen van der Heijden <jeroen@transceptor.technology>
+    Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 import base64
 import json
@@ -86,7 +86,7 @@ def value_from_dict(val):
         try:
             return data.decode('utf-8')
         except UnicodeDecodeError:
-            return data  # fallback, just return the bytes
+            return data  # fallback, just return as bytes
 
     if 'entityValue' in val:
         return {
