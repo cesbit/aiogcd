@@ -335,8 +335,8 @@ class GcdConnector:
 
     async def get_entities_by_keys(self, keys, missing=None, deferred=None,
                                    eventual=False):
-        """Returns entity objects for the given keys or None in case no
-        entity is found.
+        """Returns entity objects for the given keys or an empty list in case
+        no entity is found.
 
         :param keys: list of Key objects
         :return: list of Entity objects or None.
@@ -382,8 +382,7 @@ class GcdConnector:
 
                     keys = deferred_keys
 
-        if entities:
-            return entities
+        return entities
 
     async def get_entity_by_key(self, key, missing=None, deferred=None,
                                 eventual=False):
