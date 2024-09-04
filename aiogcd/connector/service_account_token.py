@@ -165,5 +165,4 @@ async def _smoke_test(project, service_file, scopes=None):
 
 if __name__ == '__main__':
     import sys
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(_smoke_test(*sys.argv[1:]))
+    asyncio.run(_smoke_test(*sys.argv[1:]))

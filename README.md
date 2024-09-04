@@ -49,10 +49,7 @@ async def example():
     # user for a code.
     await gcd.connect()
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(example())
-
-
+asyncio.run(example())
 ```
 
 ### Entity
@@ -86,8 +83,7 @@ async def insert_alice():
 
     await gcd.insert_entity(alice)
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(insert_alice())
+asyncio.run(insert_alice())
 
 ```
 
@@ -188,11 +184,9 @@ gcd = GcdConnector(
     client_secret='my_client_secret',
     token_file='token_file.json')
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(gcd.connect())
-loop.run_until_complete(insert_alice())
-loop.run_until_complete(query_users())
-
+asyncio.run(gcd.connect())
+asyncio.run(insert_alice())
+asyncio.run(query_users())
 ```
 
 
