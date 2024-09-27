@@ -1,0 +1,6 @@
+[tool.pyright]
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+include = [
+    "aiogcd/orm"
+]

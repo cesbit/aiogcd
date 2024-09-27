@@ -3,6 +3,7 @@
 Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
+from typing import Callable, Union
 
 
 class ProtectedList(list):
@@ -10,7 +11,7 @@ class ProtectedList(list):
     def __init__(
             self,
             *args,
-            protect=True):
+            protect: Union[Callable[..., None], bool] = True):
         self._protect = protect
         super().__init__(*args)
 

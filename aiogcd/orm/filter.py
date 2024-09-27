@@ -3,13 +3,19 @@
 Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
+from typing import Any, Optional, Union, Type
 from ..connector.key import Key
 from ..connector import GcdConnector
+from .model import GcdModel
+from .properties.value import Value
 
 
 class Filter(dict):
 
-    def __init__(self, model, *filters, has_ancestor=None, key=None):
+    def __init__(self, model: Type[GcdModel], *filters,
+                 has_ancestor: Optional[Key] = None,
+                 key: Optional[Key] = None):
+
         self._model = model
         self._cursor = None
         filters = list(filters)
@@ -35,7 +41,7 @@ class Filter(dict):
                 'value': {'keyValue': key.get_dict()},
                 'op': 'EQUAL'})
 
-        filter_dict = {'query': {'kind': [{'name': self._model.get_kind()}]}}
+        filter_dict: dict[str, Any] = {'query': {'kind': [{'name': self._model.get_kind()}]}}
 
         if self._model.__namespace__:
             filter_dict['partitionId'] = {
@@ -86,7 +92,9 @@ class Filter(dict):
     def cursor(self):
         return self._cursor
 
-    def order_by(self, *order):
+    def order_by(self, *order: Any):
+        # TODO type Value.name, *order could be:
+        # list[Union[Type[Value], tuple[str, str]]]
         self['query']['order'] = [
             {
                 'property': {'name': p[0]},
@@ -99,7 +107,7 @@ class Filter(dict):
         ]
         return self
 
-    def limit(self, limit, start_cursor=None):
+    def limit(self, limit: int, start_cursor: Optional[str] = None):
         self._set_limit(limit)
         self._set_start_cursor(start_cursor)
         return self
@@ -114,7 +122,8 @@ class Filter(dict):
         return None if entity is None else self._model(entity)
 
     async def get_entities(
-            self, gcd: GcdConnector, offset=None, limit=None) -> list:
+            self, gcd: GcdConnector, offset: Optional[int] = None,
+            limit: Optional[int] = None) -> list[Any]:
         """Returns a list containing GcdModel instances from the supplied
         filter.
 
@@ -127,6 +136,7 @@ class Filter(dict):
         self._set_limit(limit)
         entities, cursor = await gcd._get_entities_cursor(self)
         self._cursor = cursor
+        # TODO return type should be list[Type[GcdModel]]
         return [self._model(ent) for ent in entities]
 
     async def get_key(self, gcd: GcdConnector):
@@ -138,7 +148,8 @@ class Filter(dict):
         return await gcd.get_key(self)
 
     async def get_keys(
-            self, gcd: GcdConnector, offset=None, limit=None) -> list:
+            self, gcd: GcdConnector, offset: Optional[int] = None,
+            limit: Optional[int] = None) -> list[Key]:
         """Returns a list containing Gcd keys from the supplied filter.
 
         :param gcd: GcdConnector instance.
@@ -150,7 +161,7 @@ class Filter(dict):
         self._set_limit(limit)
         return await gcd.get_keys(self)
 
-    def set_offset_limit(self, offset, limit):
+    def set_offset_limit(self, offset: int, limit: int):
         """Set offset and limit for Filter query.
         :param offset: can be int or None(to avoid setting offset)
         :param limit: can be int or None(to avoid setting limit)
