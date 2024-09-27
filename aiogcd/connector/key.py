@@ -4,6 +4,7 @@ Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 import base64
+from typing import Optional
 from .buffer import Buffer
 from .buffer import BufferDecodeError
 from .path import Path
@@ -40,8 +41,10 @@ class Key:
 """
     _ks = None
 
-    def __init__(self, *args, ks=None, path=None, project_id=None,
-                 namespace_id=None):
+    def __init__(self, *args, ks: Optional[str] = None,
+                 path: Optional[Path] = None,
+                 project_id: Optional[str] = None,
+                 namespace_id: Optional[str] = None):
         if len(args) == 1 and isinstance(args[0], dict):
             assert ks is None and path is None and project_id is None, \
                 self.KEY_INIT_MSG
@@ -147,7 +150,7 @@ class Key:
         return None
 
     @staticmethod
-    def _deserialize_ks(ks):
+    def _deserialize_ks(ks: str):
         """Returns a Key() object from a key string."""
 
         decoder = Decoder(ks=ks)

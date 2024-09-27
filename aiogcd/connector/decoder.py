@@ -4,6 +4,7 @@ Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 import base64
+from typing import Union, Any
 from .buffer import Buffer
 from .buffer import BufferDecodeError
 
@@ -13,9 +14,9 @@ class Decoder(Buffer):
     _idx = None
     _end = None
 
-    def __new__(cls, *args, ks=None):
+    def __new__(cls, *args: Any, ks: Union[str, bytes, None] = None):
         assert ks is not None, \
-            'Key string is required, for example: Decoder(ks=<ket_string>)'
+            'Key string is required, for example: Decoder(ks=<key_string>)'
 
         decoder = super().__new__(cls)
 

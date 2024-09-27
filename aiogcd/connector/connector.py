@@ -7,6 +7,7 @@ Created on: May 19, 2017
 import os
 import json
 import aiohttp
+from typing import Iterable, Optional, Any
 from .client_token import Token
 from .service_account_token import ServiceAccountToken
 from .entity import Entity
@@ -37,12 +38,12 @@ class GcdConnector:
 
     def __init__(
             self,
-            project_id,
-            client_id,
-            client_secret,
-            token_file,
-            scopes=DEFAULT_SCOPES,
-            namespace_id=None):
+            project_id: str,
+            client_id: str,
+            client_secret: str,
+            token_file: str,
+            scopes: Iterable[str] = DEFAULT_SCOPES,
+            namespace_id: Optional[str] = None):
 
         self.project_id = project_id
         self.namespace_id = namespace_id
@@ -88,7 +89,7 @@ class GcdConnector:
     # alias
     entities = insert_entities
 
-    async def insert_entity(self, entity):
+    async def insert_entity(self, entity: Entity):
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -100,7 +101,7 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([entity], 'insert'))[0]
 
-    async def upsert_entities(self, entities):
+    async def upsert_entities(self, entities: Iterable[Entity]):
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -112,7 +113,7 @@ class GcdConnector:
         """
         return await self._commit_entities_or_keys(entities, 'upsert')
 
-    async def upsert_entity(self, entity):
+    async def upsert_entity(self, entity: Entity):
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -123,7 +124,7 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([entity], 'upsert'))[0]
 
-    async def update_entities(self, entities):
+    async def update_entities(self, entities: Iterable[Entity]):
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -135,7 +136,7 @@ class GcdConnector:
         """
         return await self._commit_entities_or_keys(entities, 'update')
 
-    async def update_entity(self, entity):
+    async def update_entity(self, entity: Entity):
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -146,7 +147,7 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([entity], 'update'))[0]
 
-    async def delete_keys(self, keys):
+    async def delete_keys(self, keys: Iterable[Key]):
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -158,7 +159,7 @@ class GcdConnector:
         """
         return await self._commit_entities_or_keys(keys, 'delete')
 
-    async def delete_key(self, key):
+    async def delete_key(self, key: Key):
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -169,7 +170,7 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([key], 'delete'))[0]
 
-    async def commit(self, mutations):
+    async def commit(self, mutations: Iterable[dict[str, Any]]):
         """Commit mutations.
 
         The only supported commit mode is NON_TRANSACTIONAL.
@@ -313,14 +314,16 @@ class GcdConnector:
         result = await self.get_keys(data)
         return result[0] if result else None
 
-    async def get_entities_by_kind(self, kind, offset=None, limit=None,
-                                   cursor=None):
+    async def get_entities_by_kind(self, kind: str,
+                                   offset: Optional[int] = None,
+                                   limit: Optional[int] = None,
+                                   cursor: Optional[str] = None):
         """Returns entities by kind.
 
         When a limit is set, this function returns a list and a cursor.
         If no limit is used, then only the list will be returned.
         """
-        query = {'kind': [{'name': kind}]}
+        query: Any = {'kind': [{'name': kind}]}
         data = {'query': query}
         if cursor:
             query['startCursor'] = cursor
@@ -333,8 +336,10 @@ class GcdConnector:
             query['limit'] = limit
             return await self._get_entities_cursor(data)
 
-    async def get_entities_by_keys(self, keys, missing=None, deferred=None,
-                                   eventual=False):
+    async def get_entities_by_keys(self, keys: Iterable[Key],
+                                   missing: Optional[list[Any]] = None,
+                                   deferred: Optional[list[Key]] = None,
+                                   eventual: bool = False):
         """Returns entity objects for the given keys or an empty list in case
         no entity is found.
 
@@ -384,8 +389,10 @@ class GcdConnector:
 
         return entities
 
-    async def get_entity_by_key(self, key, missing=None, deferred=None,
-                                eventual=False):
+    async def get_entity_by_key(self, key: Key,
+                                missing: Optional[list[Any]] = None,
+                                deferred: Optional[list[Key]] = None,
+                                eventual: bool = False):
         """Returns an entity object for the given key or None in case no
         entity is found.
 
@@ -429,11 +436,11 @@ class GcdConnector:
 class GcdServiceAccountConnector(GcdConnector):
     def __init__(
             self,
-            project_id,
-            service_file,
-            session=None,
-            scopes=None,
-            namespace_id=None):
+            project_id: str,
+            service_file: str,
+            session: Optional[aiohttp.ClientSession] = None,
+            scopes: Optional[Iterable[str]] = None,
+            namespace_id: Optional[str] = None):
 
         scopes = scopes or list(DEFAULT_SCOPES)
         self.project_id = project_id

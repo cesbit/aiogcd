@@ -112,7 +112,7 @@ class Filter(dict):
         self._set_start_cursor(start_cursor)
         return self
 
-    async def get_entity(self, gcd: GcdConnector):
+    async def get_entity(self, gcd: GcdConnector) -> Any:
         """Return a GcdModel instance from the supplied filter.
 
         :param gcd: GcdConnector instance.
