@@ -6,13 +6,11 @@ Created on: May 19, 2017
 from typing import Any, Optional, Union, Type
 from ..connector.key import Key
 from ..connector import GcdConnector
-from .model import GcdModel
-from .properties.value import Value
 
 
 class Filter(dict):
 
-    def __init__(self, model: Type[GcdModel], *filters,
+    def __init__(self, model, *filters,
                  has_ancestor: Optional[Key] = None,
                  key: Optional[Key] = None):
 

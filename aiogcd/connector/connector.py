@@ -323,7 +323,7 @@ class GcdConnector:
         When a limit is set, this function returns a list and a cursor.
         If no limit is used, then only the list will be returned.
         """
-        query: Any = {'kind': [{'name': kind}]}
+        query: dict[str, Any] = {'kind': [{'name': kind}]}
         data = {'query': query}
         if cursor:
             query['startCursor'] = cursor
