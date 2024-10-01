@@ -3,7 +3,7 @@
 Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
-from typing import Any, Optional, Union, Type
+from typing import Any, Optional
 from ..connector.key import Key
 from ..connector import GcdConnector
 

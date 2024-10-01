@@ -3,7 +3,6 @@
 Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
-import functools
 from typing import Any, Optional
 from ..connector.entity import Entity
 from ..orm.properties.value import Value
