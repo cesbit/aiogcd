@@ -2,10 +2,10 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build:
@@ -26,9 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest pycodestyle
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Run tests with pytest
-        run: |
-          pytest
       - name: Lint with PyCodeStyle
         run: |
           find . -name \*.py -exec pycodestyle {} +

@@ -3,9 +3,10 @@
 Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
-import functools
+from typing import Any, Optional
 from ..connector.entity import Entity
 from ..orm.properties.value import Value
+from ..connector import GcdConnector
 from ..connector.key import Key
 from .filter import Filter
 from ..connector.timestampvalue import TimestampValue
@@ -139,7 +140,9 @@ class GcdModel(Entity, metaclass=_ModelClass):
         super().del_property(prop)
 
     @classmethod
-    def filter(cls, *filters, has_ancestor=None, key=None):
+    def filter(cls, *filters: dict[str, Any],
+               has_ancestor: Optional[Key] = None,
+               key: Optional[Key] = None):
         return Filter(
             cls,
             *filters,
@@ -153,10 +156,13 @@ class GcdModel(Entity, metaclass=_ModelClass):
         return cls.__kind__
 
     @classmethod
-    async def get_entities(cls, gcd, offset=None, limit=None):
+    async def get_entities(cls, gcd: GcdConnector,
+                           offset: Optional[int] = None,
+                           limit: Optional[int] = None):
         return await Filter(cls).get_entities(gcd, offset, limit)
 
-    def serializable_dict(self, key_as=None, include_none=False):
+    def serializable_dict(self, key_as: Optional[str] = None,
+                          include_none: bool = False):
         """Serialize a GcdModel to a Python dict.
 
         :param key_as: If key_as is set to a string value, then the key string

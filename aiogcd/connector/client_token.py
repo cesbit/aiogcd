@@ -89,7 +89,7 @@ class Token:
             return token
         return None
 
-    async def get(self):
+    async def get(self) -> str:
         """Returns the access token. If _refresh_ts is passed, the token will
         be refreshed. A lock is used to prevent refreshing the token twice.
 
