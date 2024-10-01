@@ -7,6 +7,7 @@ Created on: May 19, 2017
 import os
 import json
 import aiohttp
+from typing import Iterable, Optional, Any, Union
 from .client_token import Token
 from .service_account_token import ServiceAccountToken
 from .entity import Entity
@@ -26,7 +27,7 @@ DATASTORE_URL = \
 _MAX_LOOPS = 128
 
 
-def _get_api_endpoint():
+def _get_api_endpoint() -> str:
     emu_host = os.getenv('DATASTORE_EMULATOR_HOST')
     if emu_host is None:
         return DEFAULT_API_ENDPOINT
@@ -37,12 +38,12 @@ class GcdConnector:
 
     def __init__(
             self,
-            project_id,
-            client_id,
-            client_secret,
-            token_file,
-            scopes=DEFAULT_SCOPES,
-            namespace_id=None):
+            project_id: str,
+            client_id: str,
+            client_secret: str,
+            token_file: str,
+            scopes: Iterable[str] = DEFAULT_SCOPES,
+            namespace_id: Optional[str] = None):
 
         self.project_id = project_id
         self.namespace_id = namespace_id
@@ -72,7 +73,7 @@ class GcdConnector:
     async def connect(self):
         await self._token.connect()
 
-    async def insert_entities(self, entities):
+    async def insert_entities(self, entities) -> tuple[bool, ...]:
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -88,7 +89,7 @@ class GcdConnector:
     # alias
     entities = insert_entities
 
-    async def insert_entity(self, entity):
+    async def insert_entity(self, entity: Entity) -> bool:
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -100,7 +101,8 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([entity], 'insert'))[0]
 
-    async def upsert_entities(self, entities):
+    async def upsert_entities(self, entities: Iterable[Entity]) -> \
+            tuple[bool, ...]:
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -112,7 +114,7 @@ class GcdConnector:
         """
         return await self._commit_entities_or_keys(entities, 'upsert')
 
-    async def upsert_entity(self, entity):
+    async def upsert_entity(self, entity: Entity) -> bool:
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -123,7 +125,8 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([entity], 'upsert'))[0]
 
-    async def update_entities(self, entities):
+    async def update_entities(self, entities: Iterable[Entity]) -> \
+            tuple[bool, ...]:
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -135,7 +138,7 @@ class GcdConnector:
         """
         return await self._commit_entities_or_keys(entities, 'update')
 
-    async def update_entity(self, entity):
+    async def update_entity(self, entity: Entity) -> bool:
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -146,7 +149,7 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([entity], 'update'))[0]
 
-    async def delete_keys(self, keys):
+    async def delete_keys(self, keys: Iterable[Key]) -> tuple[bool, ...]:
         """Returns a tuple containing boolean values. Each boolean value is
         True in case of a successful mutation and False if not. The order of
         booleans is the same as the supplied tuple or list.
@@ -158,7 +161,7 @@ class GcdConnector:
         """
         return await self._commit_entities_or_keys(keys, 'delete')
 
-    async def delete_key(self, key):
+    async def delete_key(self, key: Key) -> bool:
         """Returns True if successful or False if not. In case of False then
         most likely a conflict was detected.
 
@@ -169,7 +172,8 @@ class GcdConnector:
         """
         return (await self._commit_entities_or_keys([key], 'delete'))[0]
 
-    async def commit(self, mutations):
+    async def commit(self, mutations: Iterable[dict[str, Any]]) -> \
+            tuple[dict, ...]:
         """Commit mutations.
 
         The only supported commit mode is NON_TRANSACTIONAL.
@@ -205,7 +209,7 @@ class GcdConnector:
                             resp.status
                         ))
 
-    async def run_query(self, data):
+    async def run_query(self, data) -> list[dict]:
         """Return entities by given query data.
 
         :param data: see the following link for the data format:
@@ -216,7 +220,7 @@ class GcdConnector:
         results, _ = await self._run_query(data)
         return results
 
-    async def _run_query(self, data):
+    async def _run_query(self, data) -> tuple[list[dict], Optional[str]]:
         results = []
         cursor = None
 
@@ -276,11 +280,12 @@ class GcdConnector:
 
         return results, cursor
 
-    async def _get_entities_cursor(self, data):
+    async def _get_entities_cursor(self, data) -> \
+            tuple[list[Entity], Optional[str]]:
         results, cursor = await self._run_query(data)
         return [Entity(result['entity']) for result in results], cursor
 
-    async def get_entities(self, data):
+    async def get_entities(self, data) -> list[Entity]:
         """Return entities by given query data.
 
         :param data: see the following link for the data format:
@@ -291,12 +296,12 @@ class GcdConnector:
         results, _ = await self._run_query(data)
         return [Entity(result['entity']) for result in results]
 
-    async def get_keys(self, data):
+    async def get_keys(self, data) -> list[Key]:
         data['query']['projection'] = [{'property': {'name': '__key__'}}]
         results, _ = await self._run_query(data)
         return [Key(result['entity']['key']) for result in results]
 
-    async def get_entity(self, data):
+    async def get_entity(self, data) -> Optional[Entity]:
         """Return an entity object by given query data.
 
         :param data: see the following link for the data format:
@@ -308,19 +313,24 @@ class GcdConnector:
         result = await self.get_entities(data)
         return result[0] if result else None
 
-    async def get_key(self, data):
+    async def get_key(self, data) -> Optional[Key]:
         data['query']['limit'] = 1
         result = await self.get_keys(data)
         return result[0] if result else None
 
-    async def get_entities_by_kind(self, kind, offset=None, limit=None,
-                                   cursor=None):
+    async def get_entities_by_kind(self, kind: str,
+                                   offset: Optional[int] = None,
+                                   limit: Optional[int] = None,
+                                   cursor: Optional[str] = None) -> Union[
+                                    list[Entity],
+                                    tuple[list[Entity], Optional[str]]
+                                   ]:
         """Returns entities by kind.
 
         When a limit is set, this function returns a list and a cursor.
         If no limit is used, then only the list will be returned.
         """
-        query = {'kind': [{'name': kind}]}
+        query: dict[str, Any] = {'kind': [{'name': kind}]}
         data = {'query': query}
         if cursor:
             query['startCursor'] = cursor
@@ -333,10 +343,13 @@ class GcdConnector:
             query['limit'] = limit
             return await self._get_entities_cursor(data)
 
-    async def get_entities_by_keys(self, keys, missing=None, deferred=None,
-                                   eventual=False):
+    async def get_entities_by_keys(self, keys: Iterable[Key],
+                                   missing: Optional[list[Any]] = None,
+                                   deferred: Optional[list[Key]] = None,
+                                   eventual: bool = False) -> list[Entity]:
         """Returns entity objects for the given keys or an empty list in case
-        no entity is found.
+        no entity is found. The order of entities might not be equal to the
+        order of provided keys.
 
         :param keys: list of Key objects
         :return: list of Entity objects.
@@ -384,8 +397,10 @@ class GcdConnector:
 
         return entities
 
-    async def get_entity_by_key(self, key, missing=None, deferred=None,
-                                eventual=False):
+    async def get_entity_by_key(self, key: Key,
+                                missing: Optional[list[Any]] = None,
+                                deferred: Optional[list[Key]] = None,
+                                eventual: bool = False) -> Optional[Entity]:
         """Returns an entity object for the given key or None in case no
         entity is found.
 
@@ -397,7 +412,7 @@ class GcdConnector:
         if entity:
             return entity[0]
 
-    async def _get_headers(self):
+    async def _get_headers(self) -> dict[str, str]:
         token = await self._token.get()
         return {
             'Authorization': 'Bearer {}'.format(token),
@@ -405,7 +420,7 @@ class GcdConnector:
         }
 
     @staticmethod
-    def _check_mutation_result(entity_or_key, mutation_result):
+    def _check_mutation_result(entity_or_key, mutation_result) -> bool:
         if 'key' in mutation_result:
             # The automatically allocated key.
             # Set only when the mutation allocated a key.
@@ -413,7 +428,8 @@ class GcdConnector:
 
         return not mutation_result.get('conflictDetected', False)
 
-    async def _commit_entities_or_keys(self, entities_or_keys, method):
+    async def _commit_entities_or_keys(self, entities_or_keys, method) -> \
+            tuple[bool, ...]:
         mutations = [
             {method: entity_or_key.get_dict()}
             for entity_or_key in entities_or_keys]
@@ -429,11 +445,11 @@ class GcdConnector:
 class GcdServiceAccountConnector(GcdConnector):
     def __init__(
             self,
-            project_id,
-            service_file,
-            session=None,
-            scopes=None,
-            namespace_id=None):
+            project_id: str,
+            service_file: str,
+            session: Optional[aiohttp.ClientSession] = None,
+            scopes: Optional[Iterable[str]] = None,
+            namespace_id: Optional[str] = None):
 
         scopes = scopes or list(DEFAULT_SCOPES)
         self.project_id = project_id

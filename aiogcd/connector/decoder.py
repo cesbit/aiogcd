@@ -13,9 +13,9 @@ class Decoder(Buffer):
     _idx = None
     _end = None
 
-    def __new__(cls, *args, ks=None):
+    def __new__(cls, *args, ks):
         assert ks is not None, \
-            'Key string is required, for example: Decoder(ks=<ket_string>)'
+            'Key string is required, for example: Decoder(ks=<key_string>)'
 
         decoder = super().__new__(cls)
 
@@ -97,7 +97,7 @@ class Decoder(Buffer):
 
         return result
 
-    def get_prefixed_string(self):
+    def get_prefixed_string(self) -> str:
         n = self.get_var_int32()
         if self._idx + n > len(self):
             raise BufferDecodeError('truncated')

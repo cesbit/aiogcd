@@ -1,6 +1,7 @@
 from urllib.parse import urlencode, quote_plus
 from asyncio_extras.contextmanager import async_contextmanager
 from asyncio_extras.asyncyield import yield_
+from typing import Optional, Iterable
 import asyncio
 import aiohttp
 import datetime
@@ -8,9 +9,8 @@ import json
 import jwt
 import logging
 import time
-import typing
 
-ScopeList = typing.List[str]
+ScopeList = Iterable[str]
 JWT_GRANT_TYPE = 'urn:ietf:params:oauth:grant-type:jwt-bearer'
 GCLOUD_TOKEN_DURATION = 3600
 MISMATCH = "Project name passed to Token does not match service_file's " \
@@ -30,7 +30,8 @@ async def ensure_session(session):
 class ServiceAccountToken():
 
     def __init__(self, project_id: str, service_file: str,
-                 scopes: ScopeList, session: aiohttp.ClientSession = None):
+                 scopes: ScopeList,
+                 session: Optional[aiohttp.ClientSession] = None):
 
         self.project_id = project_id
 
