@@ -341,7 +341,8 @@ class GcdConnector:
                                    deferred: Optional[list[Key]] = None,
                                    eventual: bool = False):
         """Returns entity objects for the given keys or an empty list in case
-        no entity is found.
+        no entity is found. The order of entities might not be equal to the
+        order of provided keys.
 
         :param keys: list of Key objects
         :return: list of Entity objects.
