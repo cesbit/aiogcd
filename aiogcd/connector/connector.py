@@ -344,7 +344,7 @@ class GcdConnector:
         no entity is found.
 
         :param keys: list of Key objects
-        :return: list of Entity objects or None.
+        :return: list of Entity objects.
         """
         read_options = make_read_options(eventual=eventual)
 

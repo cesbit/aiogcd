@@ -1,3 +1,6 @@
+[![CI](https://github.com/cesbit/aiogcd/workflows/CI/badge.svg)](https://github.com/cesbit/aiogcd/actions)
+[![Release Version](https://img.shields.io/github/release/cesbit/aiogcd)](https://github.com/cesbit/aiogcd/releases)
+
 Async Google Cloud Datastore API
 ================================
 Package aiogcd includes both a Connector and ORM layer for communicating with Google Cloud Datastore without using App Engine.
