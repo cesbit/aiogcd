@@ -16,7 +16,7 @@ twine upload --repository pypi dist/aiogcd-X.X.X.tar.gz
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.12.0'
+VERSION = '0.13.0'
 
 install_requires = [
     'aiohttp>=2',
