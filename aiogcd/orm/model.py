@@ -58,8 +58,7 @@ class GcdModel(Entity, metaclass=_ModelClass):
     __kind__ = None
     __namespace__ = None
 
-    def __init__(self, entity: Optional[Entity] = None,
-                 key: Optional[Key] = None, **template: Any):
+    def __init__(self, entity=None, key=None, **template):
         """Initialize a GcdModel.
 
         You can initialize a model by using either an Entity OR a Key and
