@@ -12,7 +12,7 @@ from .utils import value_to_dict
 
 class Entity:
 
-    def __init__(self, entity_res):
+    def __init__(self, entity_res: dict):
         """Initialize an Entity object.
 
         Example:

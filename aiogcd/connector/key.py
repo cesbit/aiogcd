@@ -151,7 +151,8 @@ class Key:
 
     @staticmethod
     def _deserialize_ks(ks: str):
-        """Returns a Key() object from a key string."""
+        """Returns a tuple with the project_id, namespace_id and Path
+        from a key string."""
 
         decoder = Decoder(ks=ks)
         project_id = None

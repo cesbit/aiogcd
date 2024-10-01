@@ -141,7 +141,8 @@ class GcdModel(Entity, metaclass=_ModelClass):
         super().del_property(prop)
 
     @classmethod
-    def filter(cls, *filters: dict[str, Any], has_ancestor: Optional[Key] = None,
+    def filter(cls, *filters: dict[str, Any],
+               has_ancestor: Optional[Key] = None,
                key: Optional[Key] = None):
         return Filter(
             cls,

@@ -1,3 +1,4 @@
+from typing import Union
 from .buffer import BufferDecodeError
 
 TYPE_ID = 0
@@ -6,7 +7,7 @@ TYPE_NAME = 1
 
 class PathElement:
 
-    def __init__(self, kind, name_or_id):
+    def __init__(self, kind: str, name_or_id: Union[str, int]):
         assert name_or_id is None or isinstance(name_or_id, (int, str)), \
             'Expecting a str or int type but got: {}'.format(
                 type(name_or_id))
@@ -28,7 +29,7 @@ class PathElement:
             buffer.add_prefixed_string(self.id)
 
     @property
-    def byte_size(self):
+    def byte_size(self) -> int:
         n = self._size_str(self.kind)
         if isinstance(self.id, int):
             n += 1 + self._size_var_int(self.id)
@@ -37,7 +38,7 @@ class PathElement:
 
         return n + 1
 
-    def get_dict(self):
+    def get_dict(self) -> dict:
         if isinstance(self.id, int):
             return {'kind': self.kind, 'id': str(self.id)}
 
@@ -47,12 +48,12 @@ class PathElement:
         return {'kind': self.kind}
 
     @classmethod
-    def _size_str(cls, s):
+    def _size_str(cls, s) -> int:
         sz = len(s)
         return cls._size_var_int(sz) + sz
 
     @staticmethod
-    def _size_var_int(n):
+    def _size_var_int(n) -> int:
         if n < 0:
             return 10
 

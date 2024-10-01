@@ -39,7 +39,9 @@ class Filter(dict):
                 'value': {'keyValue': key.get_dict()},
                 'op': 'EQUAL'})
 
-        filter_dict: dict[str, Any] = {'query': {'kind': [{'name': self._model.get_kind()}]}}
+        filter_dict: dict[str, Any] = {
+            'query': {'kind': [{'name': self._model.get_kind()}]}
+        }
 
         if self._model.__namespace__:
             filter_dict['partitionId'] = {
