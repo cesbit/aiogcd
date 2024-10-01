@@ -4,33 +4,6 @@ TYPE_ID = 0
 TYPE_NAME = 1
 
 
-def path_element_from_decoder(decoder):
-    kind = None
-    name_or_id = None
-
-    while True:
-        tt = decoder.get_var_int32()
-
-        if tt == 12:
-            break
-        if tt == 18:
-            kind = decoder.get_prefixed_string()
-            continue
-        if tt == 24:
-            name_or_id = decoder.get_var_int64()
-            continue
-        if tt == 34:
-            name_or_id = decoder.get_prefixed_string()
-            continue
-        if tt == 0:
-            raise BufferDecodeError('corrupt')
-
-    assert kind is not None and name_or_id is not None, \
-        'Expecting a path element with a kind and name/id.'
-
-    return PathElement(kind, name_or_id)
-
-
 class PathElement:
 
     def __init__(self, kind, name_or_id):
@@ -90,3 +63,30 @@ class PathElement:
             if n == 0:
                 break
         return result
+
+
+def path_element_from_decoder(decoder) -> PathElement:
+    kind = None
+    name_or_id = None
+
+    while True:
+        tt = decoder.get_var_int32()
+
+        if tt == 12:
+            break
+        if tt == 18:
+            kind = decoder.get_prefixed_string()
+            continue
+        if tt == 24:
+            name_or_id = decoder.get_var_int64()
+            continue
+        if tt == 34:
+            name_or_id = decoder.get_prefixed_string()
+            continue
+        if tt == 0:
+            raise BufferDecodeError('corrupt')
+
+    assert kind is not None and name_or_id is not None, \
+        'Expecting a path element with a kind and name/id.'
+
+    return PathElement(kind, name_or_id)

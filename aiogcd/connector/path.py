@@ -8,20 +8,6 @@ from .pathelement import path_element_from_decoder
 from .buffer import BufferDecodeError
 
 
-def path_from_decoder(decoder):
-    pairs = []
-    while decoder:
-        tt = decoder.get_var_int32()
-        if tt == 11:
-            pairs.append(path_element_from_decoder(decoder))
-            continue
-
-        if tt == 0:
-            raise BufferDecodeError('corrupted')
-
-    return Path(pairs=pairs)
-
-
 class Path:
 
     def __init__(self, pairs):
@@ -58,3 +44,17 @@ class Path:
         """Returns a tuple of pairs (tuples) representing the key path of an
         entity. Useful for composing entities with a specific ancestor."""
         return tuple((pe.kind, pe.id) for pe in self._path)
+
+
+def path_from_decoder(decoder) -> Path:
+    pairs = []
+    while decoder:
+        tt = decoder.get_var_int32()
+        if tt == 11:
+            pairs.append(path_element_from_decoder(decoder))
+            continue
+
+        if tt == 0:
+            raise BufferDecodeError('corrupted')
+
+    return Path(pairs=pairs)
