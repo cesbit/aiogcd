@@ -41,7 +41,7 @@ class ProtectedList(list):
 
         super().extend(iterable)
 
-    def pop(self, index=None):
+    def pop(self, index: int = -1):  # type: ignore
         if self._protect is True:
             raise TypeError('This list is protected.')
         return super().pop(index)

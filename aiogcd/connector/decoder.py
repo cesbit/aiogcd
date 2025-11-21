@@ -25,8 +25,8 @@ class Decoder(Buffer):
         ks += b'=' * (4 - len(ks) % 4)
         ks = base64.b64decode(ks.replace(b'-', b'+').replace(b'_', b'/'))
         decoder.frombytes(ks)
-        decoder._idx = 0
-        decoder.set_end()
+        decoder._idx = 0  # type: ignore
+        decoder.set_end()  # type: ignore
         return decoder
 
     def set_end(self, end=None):
@@ -35,13 +35,13 @@ class Decoder(Buffer):
         self._end = len(self) if end is None else self._idx + end
 
     def __bool__(self):
-        return self._idx < self._end
+        return self._idx < self._end  # type: ignore
 
     def _get8(self):
         if not self:
             raise BufferDecodeError('truncated')
-        c = self[self._idx]
-        self._idx += 1
+        c = self[self._idx]  # type: ignore
+        self._idx += 1  # type: ignore
         return c
 
     def get_var_int32(self):

@@ -3,7 +3,7 @@
 Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
-from typing import Iterable, Union
+from typing import Iterable
 from .pathelement import PathElement
 from .pathelement import path_element_from_decoder
 from .buffer import BufferDecodeError
@@ -11,10 +11,9 @@ from .buffer import BufferDecodeError
 
 class Path:
 
-    def __init__(self, pairs: Union[
-                Iterable[PathElement],
-                Iterable[tuple[str, Union[int, str]]]]):
-        self._path: tuple[PathElement] = tuple(
+    def __init__(self, pairs: Iterable[PathElement] | Iterable[
+                 tuple[str, int | str]]):
+        self._path: tuple[PathElement, ...] = tuple(
             pe if isinstance(pe, PathElement) else PathElement(*pe)
             for pe in pairs)
 
@@ -43,7 +42,7 @@ class Path:
             n += path_element.byte_size
         return n
 
-    def get_as_tuple(self) -> tuple[tuple[str, Union[str, int]], ...]:
+    def get_as_tuple(self) -> tuple[tuple[str, str | int], ...]:
         """Returns a tuple of pairs (tuples) representing the key path of an
         entity. Useful for composing entities with a specific ancestor."""
         return tuple((pe.kind, pe.id) for pe in self._path)

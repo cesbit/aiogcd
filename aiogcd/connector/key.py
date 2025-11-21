@@ -4,7 +4,6 @@ Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 import base64
-from typing import Optional
 from .buffer import Buffer
 from .buffer import BufferDecodeError
 from .path import Path
@@ -40,11 +39,12 @@ class Key:
             Key(path=Path(...), project_id="my-project-id")
 """
     _ks = None
+    path: Path
 
-    def __init__(self, *args, ks: Optional[str] = None,
-                 path: Optional[Path] = None,
-                 project_id: Optional[str] = None,
-                 namespace_id: Optional[str] = None):
+    def __init__(self, *args, ks: str | None = None,
+                 path: Path | None = None,
+                 project_id: str | None = None,
+                 namespace_id: str | None = None):
         if len(args) == 1 and isinstance(args[0], dict):
             assert ks is None and path is None and project_id is None, \
                 self.KEY_INIT_MSG
@@ -96,16 +96,17 @@ class Key:
         this method for generating an urlsafe key string.
         """
         buffer = Buffer()
-        buffer.add_var_int32(106)
+        buffer.add_var_int32(106)  # type: ignore
 
         # The project id in a key string is prefixed with s~
-        buffer.add_prefixed_string('s~{}'.format(self.project_id))
+        buffer.add_prefixed_string(  # type: ignore
+            's~{}'.format(self.project_id))
 
         self.path.encode(buffer)
 
         if self.namespace_id:
-            buffer.add_var_int32(162)
-            buffer.add_prefixed_string(self.namespace_id)
+            buffer.add_var_int32(162)  # type: ignore
+            buffer.add_prefixed_string(self.namespace_id)  # type: ignore
 
         return buffer
 
@@ -134,12 +135,12 @@ class Key:
         return self.path[-1].kind
 
     @property
-    def id(self):
+    def id(self) -> int | str:
         """Shortcut for .path[-1].id"""
         return self.path[-1].id
 
     @staticmethod
-    def _extract_id_or_name(pair):
+    def _extract_id_or_name(pair) -> int | str:
         """Used on __init__."""
         if 'id' in pair:
             return int(pair['id'])
@@ -147,41 +148,42 @@ class Key:
         if 'name' in pair:
             return pair['name']
 
-        return None
+        return ''
 
     @staticmethod
-    def _deserialize_ks(ks: str):
+    def _deserialize_ks(ks: str) -> tuple[str | None, str | None, Path]:
         """Returns a tuple with the project_id, namespace_id and Path
         from a key string."""
 
         decoder = Decoder(ks=ks)
-        project_id = None
-        namespace_id = None
-        path = None
+        project_id: str | None = None
+        namespace_id: str | None = None
+        path: Path | None = None
 
         while decoder:
-            tt = decoder.get_var_int32()
+            tt = decoder.get_var_int32()  # type: ignore
 
             if tt == 106:
                 # The project id in a key string is prefixed with s~ which is
                 # not part of the real project id.
-                project_id = decoder.get_prefixed_string()[2:]
+                project_id = decoder.get_prefixed_string()[2:]  # type: ignore
                 continue
 
             if tt == 114:
-                sz = decoder.get_var_int32()
-                decoder.set_end(sz)
+                sz = decoder.get_var_int32()  # type: ignore
+                decoder.set_end(sz)  # type: ignore
                 path = path_from_decoder(decoder)
-                decoder.set_end()
+                decoder.set_end()  # type: ignore
                 continue
 
             if tt == 162:
-                namespace_id = decoder.get_prefixed_string()
+                namespace_id = decoder.get_prefixed_string()  # type: ignore
                 continue
 
             if tt == 0:
                 raise BufferDecodeError('corrupt')
 
+        assert path
         return project_id, namespace_id, path
 
     def get_parent(self):

@@ -8,15 +8,15 @@ Created on: May 19, 2017
 
 Upload to PyPI:
 
-python setup.py sdist
-twine upload --repository pypitest dist/aiogcd-X.X.X.tar.gz
-twine upload --repository pypi dist/aiogcd-X.X.X.tar.gz
+python -m build
+twine upload --repository pypitest dist/aiogcd-X.X.X*
+twine upload --repository pypi dist/aiogcd-X.X.X*
 """
 
 import setuptools
 from distutils.core import setup, Extension
 
-VERSION = '0.12.1'
+VERSION = '0.13.0'
 
 install_requires = [
     'aiohttp>=2',

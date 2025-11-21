@@ -37,7 +37,7 @@ class Entity:
         https://cloud.google.com/datastore/docs/reference/rest/v1/Entity
         """
         self.key = Key(entity_res['key'])
-        self._properties = set()
+        self._properties: set[str] = set()
 
         for prop, val in entity_res['properties'].items():
             self._properties.add(prop)

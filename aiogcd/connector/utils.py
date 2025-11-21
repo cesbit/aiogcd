@@ -34,7 +34,7 @@ def value_to_dict(val):
                 .decode('utf-8')}
         return {'stringValue': val}
     if isinstance(val, Key):
-        return {'keyValue': val.get_dict()}
+        return {'keyValue': val.get_dict()}  # type: ignore
     if isinstance(val, list):
         return {'arrayValue': {'values': [value_to_dict(v) for v in val]}}
     if isinstance(val, TimestampValue):

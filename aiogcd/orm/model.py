@@ -35,7 +35,7 @@ class _ModelClass(type):
     class dictionary object.
     """
     @classmethod
-    def __prepare__(mcs, name, bases):
+    def __prepare__(mcs, name, bases):  # type: ignore
         return _PropertyClass()
 
     def __new__(mcs, name, *args, **kwargs):
@@ -107,7 +107,7 @@ class GcdModel(Entity, metaclass=_ModelClass):
             else:
                 super().__setattr__(prop.name, None)
 
-    def __new__(mcs, *args, **kwargs):
+    def __new__(mcs, *args, **kwargs):  # type: ignore
         if getattr(mcs, '__kind__') is None:
             mcs.__kind__ = mcs.__name__
         return super().__new__(mcs)

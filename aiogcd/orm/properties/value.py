@@ -44,7 +44,7 @@ class Value:
             'op': op
         }
 
-    def __eq__(self, other):
+    def __eq__(self, other):  # type: ignore
         return self._compare(other, 'EQUAL')
 
     def __ne__(self, other):

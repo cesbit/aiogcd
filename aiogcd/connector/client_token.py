@@ -95,6 +95,7 @@ class Token:
 
         :return: Access token (string)
         """
+        assert self._refresh_ts is not None and self._token is not None
         async with self._lock:
             if self._refresh_ts < time.time():
                 await self._refresh_token()
@@ -127,6 +128,7 @@ class Token:
                 logging.info('Token is valid.')
 
     async def _refresh_token(self):
+        assert self._token is not None
         logging.info(
             'Token has exceeded half of the expiration time, '
             'starting a token refresh.')

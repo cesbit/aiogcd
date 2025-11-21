@@ -7,7 +7,7 @@ Created on: May 19, 2017
 import os
 import json
 import aiohttp
-from typing import Iterable, Optional, Any, Union
+from typing import Iterable, Any
 from .client_token import Token
 from .service_account_token import ServiceAccountToken
 from .entity import Entity
@@ -43,7 +43,7 @@ class GcdConnector:
             client_secret: str,
             token_file: str,
             scopes: Iterable[str] = DEFAULT_SCOPES,
-            namespace_id: Optional[str] = None):
+            namespace_id: str | None = None):
 
         self.project_id = project_id
         self.namespace_id = namespace_id
@@ -220,7 +220,7 @@ class GcdConnector:
         results, _ = await self._run_query(data)
         return results
 
-    async def _run_query(self, data) -> tuple[list[dict], Optional[str]]:
+    async def _run_query(self, data) -> tuple[list[dict], str| None]:
         results = []
         cursor = None
 
@@ -281,7 +281,7 @@ class GcdConnector:
         return results, cursor
 
     async def _get_entities_cursor(self, data) -> \
-            tuple[list[Entity], Optional[str]]:
+            tuple[list[Entity], str | None]:
         results, cursor = await self._run_query(data)
         return [Entity(result['entity']) for result in results], cursor
 
@@ -301,7 +301,7 @@ class GcdConnector:
         results, _ = await self._run_query(data)
         return [Key(result['entity']['key']) for result in results]
 
-    async def get_entity(self, data) -> Optional[Entity]:
+    async def get_entity(self, data) -> Entity | None:
         """Return an entity object by given query data.
 
         :param data: see the following link for the data format:
@@ -313,18 +313,18 @@ class GcdConnector:
         result = await self.get_entities(data)
         return result[0] if result else None
 
-    async def get_key(self, data) -> Optional[Key]:
+    async def get_key(self, data) -> Key | None:
         data['query']['limit'] = 1
         result = await self.get_keys(data)
         return result[0] if result else None
 
-    async def get_entities_by_kind(self, kind: str,
-                                   offset: Optional[int] = None,
-                                   limit: Optional[int] = None,
-                                   cursor: Optional[str] = None) -> Union[
-                                    list[Entity],
-                                    tuple[list[Entity], Optional[str]]
-                                   ]:
+    async def get_entities_by_kind(
+            self,
+            kind: str,
+            offset: int | None = None,
+            limit: int | None = None,
+            cursor: str | None = None
+            ) -> list[Entity] | tuple[list[Entity], str | None]:
         """Returns entities by kind.
 
         When a limit is set, this function returns a list and a cursor.
@@ -344,8 +344,8 @@ class GcdConnector:
             return await self._get_entities_cursor(data)
 
     async def get_entities_by_keys(self, keys: Iterable[Key],
-                                   missing: Optional[list[Any]] = None,
-                                   deferred: Optional[list[Key]] = None,
+                                   missing: list[Any] | None = None,
+                                   deferred: list[Key] | None = None,
                                    eventual: bool = False) -> list[Entity]:
         """Returns entity objects for the given keys or an empty list in case
         no entity is found. The order of entities might not be equal to the
@@ -398,9 +398,9 @@ class GcdConnector:
         return entities
 
     async def get_entity_by_key(self, key: Key,
-                                missing: Optional[list[Any]] = None,
-                                deferred: Optional[list[Key]] = None,
-                                eventual: bool = False) -> Optional[Entity]:
+                                missing: list[Any] | None = None,
+                                deferred: list[Key] | None = None,
+                                eventual: bool = False) -> Entity | None:
         """Returns an entity object for the given key or None in case no
         entity is found.
 
@@ -447,9 +447,9 @@ class GcdServiceAccountConnector(GcdConnector):
             self,
             project_id: str,
             service_file: str,
-            session: Optional[aiohttp.ClientSession] = None,
-            scopes: Optional[Iterable[str]] = None,
-            namespace_id: Optional[str] = None):
+            session: aiohttp.ClientSession | None = None,
+            scopes: Iterable[str] | None = None,
+            namespace_id: str | None = None):
 
         scopes = scopes or list(DEFAULT_SCOPES)
         self.project_id = project_id

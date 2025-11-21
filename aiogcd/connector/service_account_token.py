@@ -72,6 +72,8 @@ class ServiceAccountToken():
 
         else:
             now = datetime.datetime.now()
+            assert self.access_token_acquired_at is not None
+            assert self.access_token_duration is not None
             delta = (now - self.access_token_acquired_at).total_seconds()
             if delta > self.access_token_duration / 2:
                 self.acquiring = asyncio.ensure_future(
@@ -93,6 +95,7 @@ class ServiceAccountToken():
         return True
 
     async def _acquire_token(self):
+        assert self.service_data is not None
         assertion = self._generate_assertion()
         url = self.service_data['token_uri']
 
@@ -115,6 +118,7 @@ class ServiceAccountToken():
         return json
 
     def _generate_assertion(self):
+        assert self.service_data is not None
         payload = self._make_gcloud_oauth_body(
         )
 
@@ -127,6 +131,7 @@ class ServiceAccountToken():
         return jwt_token
 
     def _make_gcloud_oauth_body(self):
+        assert self.service_data is not None
         uri = self.service_data['token_uri']
         client_email = self.service_data['client_email']
 
