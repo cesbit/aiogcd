@@ -1,0 +1,4 @@
+aiohttp
+PyJWT
+cryptography
+asyncio_extras
