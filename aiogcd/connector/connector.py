@@ -220,7 +220,7 @@ class GcdConnector:
         results, _ = await self._run_query(data)
         return results
 
-    async def _run_query(self, data) -> tuple[list[dict], str| None]:
+    async def _run_query(self, data) -> tuple[list[dict], str | None]:
         results = []
         cursor = None
 
