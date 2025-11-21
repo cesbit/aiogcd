@@ -36,9 +36,9 @@ setup(
     description='Async Google Cloud Datastore API',
     author='Jeroen van der Heijden',
     author_email='jeroen@cesbit.com',
-    url='https://github.com/transceptor-technology/aiogcd',
+    url='https://github.com/cesbit/aiogcd',
     download_url='https://'
-        'github.com/transceptor-technology/'
+        'github.com/cesbit/'
         'aiogcd/tarball/{}'.format(VERSION),
     keywords=['gcd', 'datastore', 'connector'],
     install_requires=install_requires,
