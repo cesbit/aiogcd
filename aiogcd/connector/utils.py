@@ -4,7 +4,7 @@ Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 import base64
-import json
+from typing import Any
 from .key import Key
 from .timestampvalue import TimestampValue
 
@@ -13,7 +13,7 @@ from .timestampvalue import TimestampValue
 _MAX_STRING_LENGTH = 1500
 
 
-def value_to_dict(val):
+def value_to_dict(val: Any) -> dict[str, Any]:
     if val is None:
         return {'nullValue': None}
     if isinstance(val, bool):
@@ -55,7 +55,7 @@ def value_to_dict(val):
     raise TypeError('Unsupported type: {}'.format(type(val)))
 
 
-def value_from_dict(val):
+def value_from_dict(val: dict[str, Any]) -> Any:
     if 'nullValue' in val:
         return None  # val['nullValue'] is None
     if 'booleanValue' in val:
@@ -75,14 +75,14 @@ def value_from_dict(val):
     if 'timestampValue' in val:
         return TimestampValue(val['timestampValue'])
     if 'blobValue' in val:
-        val = val['blobValue']
-        if isinstance(val, bytes):
-            return val
+        blob = val['blobValue']
+        if isinstance(blob, bytes):
+            return blob
 
-        val = val.encode('utf-8')
-        pad = b'=' * (4 - len(val) % 4)
+        eblob = blob.encode('utf-8')
+        pad = b'=' * (4 - len(eblob) % 4)
         data = base64.b64decode(
-            (val + pad).replace(b'-', b'+').replace(b'_', b'/'))
+            (eblob + pad).replace(b'-', b'+').replace(b'_', b'/'))
         try:
             return data.decode('utf-8')
         except UnicodeDecodeError:

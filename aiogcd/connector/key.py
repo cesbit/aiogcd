@@ -130,7 +130,7 @@ class Key:
         return d
 
     @property
-    def kind(self):
+    def kind(self) -> str:
         """Shortcut for .path[-1].kind"""
         return self.path[-1].kind
 
