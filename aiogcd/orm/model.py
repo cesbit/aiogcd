@@ -71,7 +71,7 @@ class GcdModel(Entity, metaclass=_ModelClass):
 
         if entity is not None:
             assert key is None and len(template) == 0, self.BASE_MODEL_INIT
-            self.__dict__.update(entity.__dict__)
+            self.__dict__.update(entity.__dict__)  # type: ignore
             props -= set(self.__dict__.keys())
 
         else:

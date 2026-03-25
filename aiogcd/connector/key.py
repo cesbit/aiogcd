@@ -4,6 +4,7 @@ Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 import base64
+from typing import Any
 from .buffer import Buffer
 from .buffer import BufferDecodeError
 from .path import Path
@@ -75,13 +76,13 @@ class Key:
         self.project_id = project_id
         self.path = Path(pairs=zip(*[iter(args)]*2)) if path is None else path
 
-    def get_path(self):
+    def get_path(self) -> tuple[tuple[str, str | int], ...]:
         return self.path.get_as_tuple()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.path.__repr__()
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if isinstance(other, self.__class__):
             return self.ks == other.ks
         return False
@@ -89,7 +90,7 @@ class Key:
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def encode(self):
+    def encode(self) -> Buffer:
         """Return a Buffer() object which is a byte-like object.
 
         For serializing the key object you can use the .ks property which uses
@@ -120,8 +121,8 @@ class Key:
                     .decode('utf-8')
         return self._ks
 
-    def get_dict(self):
-        d = {'partitionId': {'projectId': self.project_id}}
+    def get_dict(self) -> dict[str, Any]:
+        d: dict[str, Any] = {'partitionId': {'projectId': self.project_id}}
 
         if self.namespace_id:
             d['partitionId']['namespaceId'] = self.namespace_id
@@ -186,7 +187,7 @@ class Key:
         assert path
         return project_id, namespace_id, path
 
-    def get_parent(self):
+    def get_parent(self) -> 'Key':
         parent_pairs = self.path.get_as_tuple()[:-1]
         parent_path = Path(pairs=parent_pairs)
         return Key(path=parent_path, project_id=self.project_id)

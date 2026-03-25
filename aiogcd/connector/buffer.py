@@ -4,6 +4,7 @@ Created on: May 19, 2017
     Author: Jeroen van der Heijden <jeroen@cesbit.com>
 """
 import array
+from typing import Self, cast, Iterable
 
 
 class BufferEncodeError(Exception):
@@ -16,8 +17,8 @@ class BufferDecodeError(Exception):
 
 class Buffer(array.array):
 
-    def __new__(cls, *args):
-        return super().__new__(cls, 'B')
+    def __new__(cls, *args: bytes | bytearray | Iterable[int]) -> Self:
+        return cast(Self, super().__new__(cls, 'B', *args))
 
     def add_var_int32(self, val):
         if val & 127 == val:

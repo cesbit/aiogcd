@@ -6,7 +6,7 @@ Created on: May 19, 2017
 from typing import Iterable
 from .pathelement import PathElement
 from .pathelement import path_element_from_decoder
-from .buffer import BufferDecodeError
+from .buffer import BufferDecodeError, Buffer
 
 
 class Path:
@@ -17,7 +17,7 @@ class Path:
             pe if isinstance(pe, PathElement) else PathElement(*pe)
             for pe in pairs)
 
-    def encode(self, buffer):
+    def encode(self, buffer: Buffer):
         buffer.add_var_int32(114)
         buffer.add_var_int32(self.byte_size)
 
@@ -26,13 +26,13 @@ class Path:
             path_element.encode(buffer)
             buffer.add_var_int32(12)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int) -> PathElement:
         return self._path.__getitem__(item)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.get_as_tuple())
 
-    def get_dict(self) -> dict:
+    def get_dict(self) -> dict[str, list[dict[str, str]]]:
         return {'path': [pe.get_dict() for pe in self._path]}
 
     @property

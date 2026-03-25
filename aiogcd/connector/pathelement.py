@@ -1,5 +1,5 @@
 from typing import Union
-from .buffer import BufferDecodeError
+from .buffer import BufferDecodeError, Buffer
 
 TYPE_ID = 0
 TYPE_NAME = 1
@@ -18,7 +18,7 @@ class PathElement:
     def name(self):
         raise TypeError('Use .id instead of .name')
 
-    def encode(self, buffer):
+    def encode(self, buffer: Buffer):
         buffer.add_var_int32(18)
         buffer.add_prefixed_string(self.kind)
         if isinstance(self.id, int):
@@ -38,7 +38,7 @@ class PathElement:
 
         return n + 1
 
-    def get_dict(self) -> dict:
+    def get_dict(self) -> dict[str, str]:
         if isinstance(self.id, int):
             return {'kind': self.kind, 'id': str(self.id)}
 
@@ -48,12 +48,12 @@ class PathElement:
         return {'kind': self.kind}
 
     @classmethod
-    def _size_str(cls, s) -> int:
+    def _size_str(cls, s: str) -> int:
         sz = len(s)
         return cls._size_var_int(sz) + sz
 
     @staticmethod
-    def _size_var_int(n) -> int:
+    def _size_var_int(n: int) -> int:
         if n < 0:
             return 10
 
