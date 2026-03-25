@@ -13,10 +13,15 @@ twine upload --repository pypitest dist/aiogcd-X.X.X*
 twine upload --repository pypi dist/aiogcd-X.X.X*
 """
 
-import setuptools
-from distutils.core import setup, Extension
+from setuptools import setup
 
 VERSION = '1.0.2'
+
+try:
+    with open('README.md', 'r') as f:
+        long_description = f.read()
+except IOError:
+    long_description = ''
 
 install_requires = [
     'aiohttp>=2',
@@ -34,6 +39,8 @@ setup(
         'aiogcd.orm.properties'],
     version=VERSION,
     description='Async Google Cloud Datastore API',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Jeroen van der Heijden',
     author_email='jeroen@cesbit.com',
     url='https://github.com/cesbit/aiogcd',
@@ -46,7 +53,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Environment :: Other Environment',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
         'Topic :: Software Development'
